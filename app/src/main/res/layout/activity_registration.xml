@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.RegistrationActivity"
+    android:id="@+id/table_layout">
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="97dp"
+            android:layout_height="99dp"
+            android:layout_span="1"
+            android:layout_gravity="center_horizontal"
+            app:srcCompat="@mipmap/logo_foreground" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <TextView
+            android:id="@+id/tv_register"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_span="1"
+            android:text="Registrati"
+            android:textSize="34sp"
+            android:gravity="center_horizontal"
+            android:textStyle="bold" />
+
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/et_user_name"
+            android:layout_width="300dp"
+            android:layout_height="54dp"
+            android:layout_span="1"
+            android:ems="10"
+            android:hint="nome utente"
+            android:inputType="text"
+            android:textColorHint="#8B000000"
+            android:visibility="visible" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/et_email"
+            android:layout_width="300dp"
+            android:layout_height="54dp"
+            android:layout_span="1"
+            android:ems="10"
+            android:hint="e-mail"
+            android:inputType="text"
+            android:textColorHint="#8D020202" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/et_password"
+            android:layout_width="300dp"
+            android:layout_height="55dp"
+            android:layout_span="1"
+            android:ems="10"
+            android:hint="inserisci password"
+            android:inputType="textPassword"
+            android:textColorHint="#8C000000" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <EditText
+            android:id="@+id/et_confirm_pwd"
+            android:layout_width="300dp"
+            android:layout_height="56dp"
+            android:layout_span="1"
+            android:ems="10"
+            android:hint="conferma password"
+            android:inputType="textPassword"
+            android:textColorHint="#8C000000" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <Button
+            android:id="@+id/btn_register"
+            android:layout_width="214dp"
+            android:layout_height="77dp"
+            android:layout_span="1"
+            android:background="#FFFFFF"
+            android:text="REGISTER"
+            android:textColor="@android:color/white"
+            android:textSize="24sp"
+            android:textStyle="bold" />
+    </TableRow>
+
+    <TableRow
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="30dp">
+
+        <ImageView
+            android:id="@+id/btn_back"
+            android:layout_width="45dp"
+            android:layout_height="51dp"
+            android:layout_gravity="left|center_vertical"
+            android:src="@mipmap/ic_back_arrow" />
+
+    </TableRow>
+</TableLayout>

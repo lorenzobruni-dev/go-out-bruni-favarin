@@ -26,6 +26,13 @@ class FirebaseDBHelper {
             dbEvents = firebaseDatabase.getReference("Events")
         }
 
+        fun getDbUsersReference(){
+            dbUsers
+        }
+        fun getDbEventsReference(){
+            dbEvents
+        }
+
         fun readUser(userEventListener: ChildEventListener) {
             dbUsers.addChildEventListener(userEventListener)
         }

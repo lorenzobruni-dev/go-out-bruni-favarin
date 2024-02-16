@@ -32,7 +32,7 @@ class LoginActivity : AppCompatActivity() {
             if (email.isNotEmpty() && password.isNotEmpty()){
                 loginUser(email, password)
             } else {
-                Toast.makeText(this, "inserisci email e password", Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Inserisci email e password", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -53,9 +53,9 @@ class LoginActivity : AppCompatActivity() {
                     val builder = AlertDialog.Builder(this)
                     with(builder)
                     {
-                        setTitle("login per ${email} fallito")
+                        setTitle("Login per ${email} fallito")
                         setMessage(task.exception?.message)
-                        setPositiveButton("ok", null)
+                        setPositiveButton("OK", null)
                         show()
                     }
 

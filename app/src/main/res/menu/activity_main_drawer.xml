@@ -9,7 +9,7 @@
             android:icon="@drawable/contatti"
             android:title="@string/menu_contatti" />
         <item
-            android:id="@+id/nav_gallery"
+            android:id="@+id/nav_addContact"
             android:icon="@drawable/add"
             android:title="@string/menu_add_contatto" />
         <item

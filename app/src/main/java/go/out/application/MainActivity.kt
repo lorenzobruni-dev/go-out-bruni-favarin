@@ -1,5 +1,6 @@
 package go.out.application
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import com.google.android.material.snackbar.Snackbar
@@ -11,6 +12,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import go.out.application.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -42,6 +44,33 @@ class MainActivity : AppCompatActivity() {
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
+
+        // Listener per l'item nav_exit
+        navView.setNavigationItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav_home -> {
+                    // Handle nav_home click
+                }
+                R.id.nav_gallery -> {
+                    // Handle nav_gallery click
+                }
+                R.id.nav_slideshow -> {
+                    // Handle nav_slideshow click
+                }
+                R.id.nav_exit -> {
+                    // Avvia l'activity di login
+                    startLoginActivity()
+                }
+            }
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
+    }
+
+    private fun startLoginActivity() {
+        val intent = Intent(this, LoginActivity::class.java)
+        startActivity(intent)
+        finish() // Chiude l'activity corrente
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

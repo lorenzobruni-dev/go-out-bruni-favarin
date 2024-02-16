@@ -16,10 +16,8 @@ class FirebaseDBHelper {
 
         private val URL = properties.getProperty("DATABASE_URL")
         private val firebaseDatabase = FirebaseDatabase.getInstance(URL)
-        private var dbUsers: DatabaseReference
-            private set
-        private var dbEvents: DatabaseReference
-            private set
+        var dbUsers: DatabaseReference
+        var dbEvents: DatabaseReference
 
         init {
             dbUsers = firebaseDatabase.getReference("Users")

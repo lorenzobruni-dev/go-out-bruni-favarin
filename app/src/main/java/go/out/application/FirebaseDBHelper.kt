@@ -1,27 +1,69 @@
 package go.out.application
 
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DatabaseReference
-import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.*
+import com.google.firebase.events.Event
+import java.util.Properties
 
 class FirebaseDBHelper {
     companion object {
-        val auth = FirebaseAuth.getInstance()
-        lateinit var dbUsers: DatabaseReference
+        private val auth = FirebaseAuth.getInstance()
+        private val properties = Properties().apply {
+            javaClass.getResourceAsStream("../../../config/config.properties").use { inputStream ->
+                load(inputStream)
+            }
+        }
+
+        private val URL = properties.getProperty("DATABASE_URL")
+        private val firebaseDatabase = FirebaseDatabase.getInstance(URL)
+        private var dbUsers: DatabaseReference
             private set
-        lateinit var dbEvents: DatabaseReference
+        private var dbEvents: DatabaseReference
             private set
 
         init {
-            val dbUsers = FirebaseDatabase
-                .getInstance()
-                .getReference("Users")
-            val dbEvents = FirebaseDatabase
-                .getInstance()
-                .getReference("Events")
+            dbUsers = firebaseDatabase.getReference("Users")
+            dbEvents = firebaseDatabase.getReference("Events")
+        }
+
+        fun readUser(userEventListener: ChildEventListener) {
+            dbUsers.addChildEventListener(userEventListener)
+        }
+
+        fun removeUser(id: String) {
+            dbUsers.child(id).removeValue()
+        }
+
+        fun getEventById(eventId: String, onComplete: (Any?) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun searchUserByEmail(email: String, callback: (String?) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun getNomiContatti(userId: String, onComplete: (List<User>) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun getUtenteDaID(userId: String, onComplete: (User?) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun getInvitedEvents(userId: String, callback: (List<Any>, List<String>) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun addEvent(event: Any, onComplete: (Boolean) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
+            // Implementazione necessaria
+        }
+
+        fun getUserNamesFromIds(userIds: List<String>, onComplete: (List<String>) -> Unit) {
+            // Implementazione necessaria
         }
     }
-
-
-
 }

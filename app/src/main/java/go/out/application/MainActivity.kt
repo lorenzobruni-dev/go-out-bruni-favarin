@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         builder.setPositiveButton("Ricerca") { dialog, _ ->
             val email = inputEmail.text.toString()
-           // FirebaseDBHelper.searchFriendByEmail(email)
+           FirebaseDBHelper.searchFriendByEmail(email)
             dialog.dismiss()
         }
 

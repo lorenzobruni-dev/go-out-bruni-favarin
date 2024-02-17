@@ -1,0 +1,49 @@
+{
+  "project_info": {
+    "project_number": "408540762196",
+    "firebase_url": "https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "progetto-pdm-goout",
+    "storage_bucket": "progetto-pdm-goout.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408540762196:android:5bbc7b8cf21f6f8dc19dc1",
+        "android_client_info": {
+          "package_name": "com.example.goout_app_favarin"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWIxayp58TZT_hMkmOCSSbey_rnteWEss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:408540762196:android:c17be11f57b4a45dc19dc1",
+        "android_client_info": {
+          "package_name": "go.out.application"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWIxayp58TZT_hMkmOCSSbey_rnteWEss"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -7,16 +7,72 @@
     tools:context=".ui.home.HomeFragment">
 
     <TextView
-        android:id="@+id/text_home"
-        android:layout_width="match_parent"
+        android:id="@+id/textViewBenvenuto"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        android:text="Benvenuto!"
+        android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/frameLayoutBox1"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/border_black"
+        android:padding="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/textViewBenvenuto"
+        app:layout_constraintBottom_toTopOf="@+id/frameLayoutBox2"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/textViewMostraAltroBox1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostra altro"
+            android:textColor="@android:color/black"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"/>
+
+    </FrameLayout>
+
+    <FrameLayout
+        android:id="@+id/frameLayoutBox2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:background="@drawable/border_black"
+        android:padding="4dp"
+        app:layout_constraintTop_toBottomOf="@+id/frameLayoutBox1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <TextView
+            android:id="@+id/textViewMostraAltroBox2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Mostra altro"
+            android:textColor="@android:color/black"
+            android:background="?attr/selectableItemBackground"
+            android:padding="8dp"
+            android:layout_gravity="bottom|start"
+            android:layout_marginStart="8dp"
+            android:layout_marginBottom="8dp"/>
+
+    </FrameLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

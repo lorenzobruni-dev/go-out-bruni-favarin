@@ -2,7 +2,10 @@ package go.out.application
 
 import android.content.Intent
 import android.os.Bundle
+import android.text.InputType
 import android.view.Menu
+import android.widget.EditText
+import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
@@ -25,13 +28,14 @@ class MainActivity : AppCompatActivity() {
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
         setSupportActionBar(binding.appBarMain.toolbar)
 
         binding.appBarMain.fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                 .setAction("Action", null).show()
         }
+
+
         val drawerLayout: DrawerLayout = binding.drawerLayout
         val navView: NavigationView = binding.navView
         val navController = findNavController(R.id.nav_host_fragment_content_main)
@@ -51,8 +55,8 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home -> {
                     // Handle nav_home click
                 }
-                R.id.nav_gallery -> {
-                    // Handle nav_gallery click
+                R.id.nav_addContact -> {
+                    showAddFriendDialog()
                 }
                 R.id.nav_slideshow -> {
                     // Handle nav_slideshow click
@@ -65,6 +69,26 @@ class MainActivity : AppCompatActivity() {
             drawerLayout.closeDrawer(GravityCompat.START)
             true
         }
+    }
+
+    private fun showAddFriendDialog() {
+        val builder = AlertDialog.Builder(this)
+        builder.setTitle("aggiungi amico")
+
+        val inputEmail = EditText(this)
+        inputEmail.inputType = InputType.TYPE_CLASS_TEXT
+        builder.setView(inputEmail)
+
+        builder.setPositiveButton("Ricerca") { dialog, _ ->
+            val email = inputEmail.text.toString()
+         //  FirebaseDBHelper.searchFriendByEmail(email)
+            dialog.dismiss()
+        }
+
+        builder.setNegativeButton("annulla") { dialog, _ ->
+            dialog.dismiss()
+        }
+        builder.show()
     }
 
     private fun startLoginActivity() {

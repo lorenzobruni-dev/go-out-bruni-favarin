@@ -1,5 +1,6 @@
 package go.out.application
 
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
@@ -144,6 +145,22 @@ class FirebaseDBHelper {
             })
         }
 
+        fun getEventFromDatabase(eventId: String, callback: (Event?) -> Unit) {
+            val eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+
+            eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val event = snapshot.getValue(Event::class.java)
+                    callback(event)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, "Failed to retrieve event from database: ${error.message}")
+                    callback(null)
+                }
+            })
+        }
+
         fun addEvent(event: Any, onComplete: (Boolean) -> Unit) {
             // Implementazione necessaria
         }
@@ -154,6 +171,10 @@ class FirebaseDBHelper {
 
         fun getUserNamesFromIds(userIds: List<String>, onComplete: (List<String>) -> Unit) {
             // Implementazione necessaria
+        }
+
+        fun addEventToCurrentUser(selectedEvent: Event?, any: Any) {
+
         }
     }
 }

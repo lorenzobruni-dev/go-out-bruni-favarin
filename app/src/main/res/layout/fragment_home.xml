@@ -33,10 +33,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/events_list"
+        <ListView
+            android:id="@+id/lv_eventi"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="600dp"
+            android:layout_weight="1"
+            android:divider="@android:color/darker_gray"
+            android:dividerHeight="0.5dp"
+            android:padding="16dp" />
 
         <TextView
             android:id="@+id/textViewMostraAltroBox1"

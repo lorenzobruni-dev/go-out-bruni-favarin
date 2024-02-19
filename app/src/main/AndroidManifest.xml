@@ -13,24 +13,25 @@
         android:theme="@style/Theme.GoOutApplication"
         tools:targetApi="31">
         <activity
+            android:name=".FullEventListActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.RegistrationActivity"
             android:exported="false" />
         <activity
             android:name=".LoginActivity"
-            android:exported="true" >
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:exported="false"
             android:label="@string/app_name"
-            android:theme="@style/Theme.GoOutApplication.NoActionBar">
-        </activity>
+            android:theme="@style/Theme.GoOutApplication.NoActionBar"></activity>
     </application>
 
 </manifest>

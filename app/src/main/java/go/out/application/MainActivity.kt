@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.text.InputType
 import android.view.Menu
 import android.widget.EditText
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.navigation.NavigationView
@@ -16,6 +17,7 @@ import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
+import com.google.firebase.auth.FirebaseAuth
 import go.out.application.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {
@@ -81,10 +83,15 @@ class MainActivity : AppCompatActivity() {
 
         builder.setPositiveButton("Ricerca") { dialog, _ ->
             val email = inputEmail.text.toString()
-         //  FirebaseDBHelper.searchFriendByEmail(email)
-            dialog.dismiss()
+           FirebaseDBHelper.searchUserByEmail(email) { friendID, message ->
+               if (friendID != null) {
+                   Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+               } else {
+                   Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+               }
+               dialog.dismiss()
+           }
         }
-
         builder.setNegativeButton("annulla") { dialog, _ ->
             dialog.dismiss()
         }

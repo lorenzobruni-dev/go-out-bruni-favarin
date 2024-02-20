@@ -2,11 +2,14 @@ package go.out.application
 
 import android.content.ContentValues.TAG
 import android.util.Log
+import android.widget.ListView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.*
 import java.util.Properties
 
 class FirebaseDBHelper {
+
     companion object {
        // private val auth = FirebaseAuth.getInstance()
         //private val properties = Properties().apply {
@@ -176,5 +179,7 @@ class FirebaseDBHelper {
         fun addEventToCurrentUser(selectedEvent: Event?, any: Any) {
 
         }
+
+
     }
 }

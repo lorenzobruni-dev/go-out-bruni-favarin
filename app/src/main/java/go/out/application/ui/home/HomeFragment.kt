@@ -2,23 +2,16 @@ package go.out.application.ui.home
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ListView
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import go.out.application.Event
 import go.out.application.EventAdapter
 import go.out.application.FirebaseDBHelper
-import go.out.application.FirebaseDBHelper.Companion.auth
-import go.out.application.FirebaseDBHelper.Companion.getInvitedEvents
 import go.out.application.FullEventListActivity
 import go.out.application.R
 
@@ -27,8 +20,6 @@ class HomeFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var currentUser: FirebaseUser
     private lateinit var adapter: EventAdapter
-    private var invitedEvents: List<Event> = emptyList()
-    private val eventsIdsList: MutableList<String> = mutableListOf()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,37 +28,76 @@ class HomeFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
 
         getInvitationsData()
+        getConfirmedEvents()
 
-        val textViewMostraAltro: TextView = view.findViewById(R.id.textViewMostraAltroBox1)
-        textViewMostraAltro.setOnClickListener {
+        val more1: TextView = view.findViewById(R.id.tv_mostra_altro1)
+        more1.setOnClickListener {
             val intent = Intent(requireContext(), FullEventListActivity::class.java)
+            intent.putExtra("bool_key", true)
+            startActivity(intent)
+        }
+        val more2: TextView = view.findViewById(R.id.tv_mostra_altro2)
+        more2.setOnClickListener {
+            val intent = Intent(requireContext(), FullEventListActivity::class.java)
+            intent.putExtra("bool_key", false)
             startActivity(intent)
         }
     }
-
+    private fun getConfirmedEvents() {
+        FirebaseDBHelper.getUserEvents(currentUser.uid) { confirmedEventsList, eventNamesList ->
+            val messageTextView = view?.findViewById<TextView>(R.id.messageTextView2)
+            val listView = view?.findViewById<ListView>(R.id.lv_eventi_confermati)
+            val btn = view?.findViewById<TextView>(R.id.tv_mostra_altro2)
+            if (confirmedEventsList.isEmpty()) {
+                messageTextView?.visibility = View.VISIBLE
+                listView?.visibility = View.GONE
+                btn?.visibility = View.GONE
+            } else {
+                messageTextView?.visibility = View.GONE
+                listView?.visibility = View.VISIBLE
+                adapter = EventAdapter(
+                    requireContext(),
+                    R.layout.event_invitations,
+                    confirmedEventsList,
+                    layoutInflater,
+                    currentUser,
+                    false
+                )
+                listView?.adapter = adapter
+                adapter.notifyDataSetChanged()
+            }
+        }
+    }
     private fun getInvitationsData() {
         FirebaseDBHelper.getInvitedEvents(currentUser.uid) { eventsList, eventsIdsList ->
-            this.eventsIdsList.clear()
-            this.eventsIdsList.addAll(eventsIdsList)
-            invitedEvents = eventsList
-            val primiElementi = invitedEvents.take(1)
-            adapter = EventAdapter(
-                requireContext(),
-                R.layout.event_invitations,
-                primiElementi,
-                layoutInflater,
-                currentUser
-            )
+            val messageTextView = view?.findViewById<TextView>(R.id.messageTextView)
             val listView = view?.findViewById<ListView>(R.id.lv_eventi)
-            listView?.adapter = adapter
-            adapter.notifyDataSetChanged()
+            val btn = view?.findViewById<TextView>(R.id.tv_mostra_altro1)
+            if (eventsList.isEmpty()) {
+                messageTextView?.visibility = View.VISIBLE
+                listView?.visibility = View.GONE
+                btn?.visibility = View.GONE
+            } else {
+                messageTextView?.visibility = View.GONE
+                listView?.visibility = View.VISIBLE
+                val primiElementi = eventsList.take(1)
+                adapter = EventAdapter(
+                    requireContext(),
+                    R.layout.event_invitations,
+                    primiElementi,
+                    layoutInflater,
+                    currentUser,
+                    true
+                )
+                listView?.adapter = adapter
+                adapter.notifyDataSetChanged()
+            }
         }
     }
 }

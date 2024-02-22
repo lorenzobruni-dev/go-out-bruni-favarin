@@ -20,23 +20,15 @@ class EventAdapter(
     val resource: Int,
     var eventsList: List<Event> = emptyList(),
     val layoutInflater: LayoutInflater,
-    var currentUser: FirebaseUser
+    var currentUser: FirebaseUser,
+    var boolean: Boolean
 ) : ArrayAdapter<String>(adapterContext, resource, eventsList.map {it.id}) {
-
-    private val selectedEventsIds: MutableSet<String> = mutableSetOf()
-    var auth = Firebase.auth
-
-
-
-
     private class ViewHolder {
         var eventName: TextView? = null
     }
-
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
         val holder: ViewHolder
-
         if (convertView == null) {
             view = layoutInflater.inflate(resource, parent, false)
             holder = ViewHolder()
@@ -46,65 +38,51 @@ class EventAdapter(
             view = convertView
             holder = view.tag as ViewHolder
         }
-
         val eventId = getItem(position)
         val selectedEvent = eventsList.find { it.id == eventId }
         holder.eventName?.text = selectedEvent?.nome ?: "Nome non disponibile"
-
-
         view.setOnClickListener {
-
-            showEventDetailsDialog(eventId!!)
+            showEventDetailsDialog(eventId!!, boolean)
         }
-
         return view
     }
-
-    private fun showEventDetailsDialog(eventId: String) {
+    private fun showEventDetailsDialog(eventId: String, boolean: Boolean) {
         val selectedEvent = eventsList.find { it.id == eventId }
         val alertDialogBuilder = AlertDialog.Builder(adapterContext)
-
-        if (selectedEvent != null) {
-            val eventDate = selectedEvent.data
-            val eventTime = selectedEvent.ora
-
-            alertDialogBuilder.setTitle("Dettagli dell'evento")
-            alertDialogBuilder.setMessage("ID evento: $eventId\nData: $eventDate\nOra: $eventTime")
-        } else {
-            alertDialogBuilder.setTitle("Dettagli dell'evento")
-            alertDialogBuilder.setMessage("ID dell'evento: $eventId\nData: Informazione non disponibile\nOra: Informazione non disponibile")
-        }
-
-        alertDialogBuilder.setPositiveButton("annulla") { dialog, _ ->
+        val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)
+        alertDialogBuilder.setTitle("Dettagli dell'evento")
+        alertDialogBuilder.setMessage(message)
+        alertDialogBuilder.setPositiveButton("chiudi") { dialog, _ ->
             dialog.dismiss()
         }
-        alertDialogBuilder.setNegativeButton("rifiuta") { dialog, _ ->
-            FirebaseDBHelper.removeParticipantFromEvent(eventId, currentUser.uid) { success ->
-                if (success) {
-                    eventsList = eventsList.filterNot { it.id == eventId }
-                    notifyDataSetChanged()
+        if (boolean) {
+            alertDialogBuilder.setNegativeButton("rifiuta") { dialog, _ ->
+                FirebaseDBHelper.removeParticipantFromEvent(eventId, currentUser.uid) { success ->
+                    if (success) {
+                        eventsList = eventsList.filterNot { it.id == eventId }
+                        notifyDataSetChanged()
+                    }
+                    dialog.dismiss()
                 }
-                dialog.dismiss()
             }
-        }
-      //  alertDialogBuilder.setNeutralButton("partecipa") { dialog, _ ->
-        //    FirebaseDBHelper.addEventToCurrentUser(selectedEvent) { success ->
-          //      if (success) {
+            //  alertDialogBuilder.setNeutralButton("partecipa") { dialog, _ ->
+            //    FirebaseDBHelper.addEventToCurrentUser(selectedEvent) { success ->
+            //      if (success) {
             //        FirebaseDBHelper.removeParticipantFromEvent(
-              //          eventId,
-                //        currentUser.uid
-                  //  ) { removeSuccess ->
-                    //    if (removeSuccess) {
-                      //      eventsList = eventsList.filterNot { it.id == eventId }
-                        //    notifyDataSetChanged()
-                       // }
-                   // }
-               // }
+            //          eventId,
+            //        currentUser.uid
+            //  ) { removeSuccess ->
+            //    if (removeSuccess) {
+            //      eventsList = eventsList.filterNot { it.id == eventId }
+            //    notifyDataSetChanged()
+            // }
+            // }
+            // }
 
-                //dialog.dismiss()
-           // }
-        //}
-
+            //dialog.dismiss()
+            // }
+            //}
+        }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
 

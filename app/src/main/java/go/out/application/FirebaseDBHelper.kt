@@ -11,11 +11,11 @@ import java.util.Properties
 class FirebaseDBHelper {
 
     companion object {
-       // private val auth = FirebaseAuth.getInstance()
+      //  val auth = FirebaseAuth.getInstance()
         //private val properties = Properties().apply {
           //  javaClass.getResourceAsStream("../../../config/config.properties").use { inputStream ->
             //    load(inputStream)
-            //}
+           // }
         //}
 
         //private val URL = properties.getProperty("DATABASE_URL")
@@ -25,7 +25,7 @@ class FirebaseDBHelper {
 
         //init {
           //  dbUsers = firebaseDatabase.getReference("Users")
-           // dbEvents = firebaseDatabase.getReference("Events")
+            //dbEvents = firebaseDatabase.getReference("Events")
         //}
 
         var auth = FirebaseAuth.getInstance()
@@ -52,14 +52,8 @@ class FirebaseDBHelper {
             dbUsers.child(id).removeValue()
         }
 
-        fun getEventById(eventId: String, onComplete: (Any?) -> Unit) {
-            // Implementazione necessaria
-        }
-
         fun searchUserByEmail(emailAmico: String, callback: (String?, String?) -> Unit) {
-
             val utenteCorrente = FirebaseAuth.getInstance().currentUser
-
             utenteCorrente?.let { user ->
                 dbUsers.orderByChild("email").equalTo(emailAmico)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -87,10 +81,8 @@ class FirebaseDBHelper {
                 callback(null, "Errore in fase di autenticazione dell'utente")
             }
         }
-
         fun aggiornaContattiUtente(userId: String, friendId: String, callback: (String?) -> Unit) {
             val currentUserRef = dbUsers.child(userId)
-
             currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val currentUser = snapshot.getValue(User::class.java)
@@ -110,13 +102,11 @@ class FirebaseDBHelper {
                         }
                     }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
                     callback(error.message)
                 }
             })
         }
-
 
         fun getNomiContatti(userId: String, onComplete: (List<User>) -> Unit) {
             // Implementazione necessaria
@@ -129,7 +119,6 @@ class FirebaseDBHelper {
         fun getInvitedEvents(userId: String, callback: (List<Event>, List<String>) -> Unit) {
             val eventsList = mutableListOf<Event>()
             val eventsIdsList = mutableListOf<String>()
-
             dbEvents.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (eventSnapshot in snapshot.children) {
@@ -141,25 +130,56 @@ class FirebaseDBHelper {
                     }
                     callback(eventsList, eventsIdsList)
                 }
-
                 override fun onCancelled(error: DatabaseError) {
-
                 }
             })
         }
 
-        fun getEventFromDatabase(eventId: String, callback: (Event?) -> Unit) {
-            val eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+        fun getUserEvents(userId: String, callback: (List<Event>, List<String>) -> Unit) {
+            val confirmedList = mutableListOf<Event>()
+            val eventNamesList = mutableListOf<String>()
 
-            eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            // Ottieni il riferimento al nodo dell'utente nel database
+            val userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId)
+
+            // Aggiungi un listener per leggere i dati dell'utente dal database Firebase
+            userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val event = snapshot.getValue(Event::class.java)
-                    callback(event)
+                    val user = snapshot.getValue(User::class.java)
+                    // Verifica se l'utente esiste e ha degli eventi nel campo "eventi"
+                    if (user != null && user.eventi?.isNotEmpty()==true) {
+                        // Itera attraverso gli ID degli eventi nell'elenco dell'utente
+                        user.eventi!!.forEach { eventId ->
+                            // Ottieni il riferimento all'evento nel database
+                            val eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+                            // Leggi i dati dell'evento dal database Firebase
+                            eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(eventSnapshot: DataSnapshot) {
+                                    val event = eventSnapshot.getValue(Event::class.java)
+                                    // Verifica se l'evento esiste e aggiungilo alla lista degli eventi
+                                    if (event != null) {
+                                        confirmedList.add(event)
+                                        event.nome?.let { eventNamesList.add(it) }
+                                    }
+                                    // Se abbiamo aggiunto tutti gli eventi all'elenco, chiamiamo il callback
+                                    if (confirmedList.size == user.eventi!!.size) {
+                                        callback(confirmedList, eventNamesList)
+                                    }
+                                }
+                                override fun onCancelled(error: DatabaseError) {
+                                    // Gestisci eventuali errori di lettura dal database
+                                    Log.e("FirebaseDBHelper", "Errore durante la lettura dell'evento: ${error.message}")
+                                }
+                            })
+                        }
+                    } else {
+                        // Chiamiamo comunque il callback se l'utente non ha eventi nel campo "eventi"
+                        callback(confirmedList, eventNamesList)
+                    }
                 }
-
                 override fun onCancelled(error: DatabaseError) {
-                    Log.e(TAG, "Failed to retrieve event from database: ${error.message}")
-                    callback(null)
+                    // Gestisci eventuali errori di lettura dal database
+                    Log.e("FirebaseDBHelper", "Errore durante la lettura dell'utente: ${error.message}")
                 }
             })
         }
@@ -178,6 +198,22 @@ class FirebaseDBHelper {
 
         fun addEventToCurrentUser(selectedEvent: Event?, any: Any) {
 
+        }
+        fun buildEventDetailsMessage(event: Event): String {
+            val stringBuilder = StringBuilder()
+            stringBuilder.append("Nome: ${event.nome}\n")
+            stringBuilder.append("Data: ${event.data}\n")
+            stringBuilder.append("Ora: ${event.ora}\n")
+            stringBuilder.append("Luogo: ${event.luogo}\n")
+
+            stringBuilder.append("\nConfermati:\n")
+            event.confermati?.let { confermatiList ->
+                for (confermato in confermatiList) {
+                    stringBuilder.append("Nome: ${confermato.nome} (${confermato.email}\n)")
+                }
+            }
+
+            return stringBuilder.toString()
         }
 
 

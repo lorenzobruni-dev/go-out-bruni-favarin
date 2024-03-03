@@ -19,11 +19,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
 import go.out.application.databinding.ActivityMainBinding
+import go.out.application.ui.event.creation.CreationEventViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,32 +47,12 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow
+                R.id.nav_home, R.id.nav_gallery, R.id.nav_create
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        // Listener per l'item nav_exit
-        navView.setNavigationItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav_home -> {
-                    // Handle nav_home click
-                }
-                R.id.nav_addContact -> {
-                    showAddFriendDialog()
-                }
-                R.id.nav_slideshow -> {
-                    // Handle nav_slideshow click
-                }
-                R.id.nav_exit -> {
-                    // Avvia l'activity di login
-                    startLoginActivity()
-                }
-            }
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
     }
 
     private fun showAddFriendDialog() {

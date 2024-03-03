@@ -36,14 +36,15 @@ class HomeFragment : Fragment() {
         getInvitationsData()
         getConfirmedEvents()
 
-        val more1: TextView = view.findViewById(R.id.tv_mostra_altro1)
-        more1.setOnClickListener {
+        val invitationEventView: TextView = view.findViewById(R.id.tv_mostra_altro1)
+        invitationEventView.setOnClickListener {
             val intent = Intent(requireContext(), FullEventListActivity::class.java)
             intent.putExtra("bool_key", true)
             startActivity(intent)
         }
-        val more2: TextView = view.findViewById(R.id.tv_mostra_altro2)
-        more2.setOnClickListener {
+
+        val confirmEventView: TextView = view.findViewById(R.id.tv_mostra_altro2)
+        confirmEventView.setOnClickListener {
             val intent = Intent(requireContext(), FullEventListActivity::class.java)
             intent.putExtra("bool_key", false)
             startActivity(intent)

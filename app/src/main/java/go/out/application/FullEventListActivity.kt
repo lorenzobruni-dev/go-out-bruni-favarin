@@ -13,17 +13,13 @@ class FullEventListActivity : AppCompatActivity() {
     private lateinit var adapter: EventAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        var bool = intent.getBooleanExtra("bool_key", false)
+        var isAnInvitationOrConfirmEvent = intent.getBooleanExtra("bool_key", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_event_list)
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
-        if (bool) {
-            getInvitationsData()
-        } else {
-            getConfirmedEvents()
-        }
-
+        if (isAnInvitationOrConfirmEvent) getInvitationsData()
+         else getConfirmedEvents()
     }
 
     private fun getInvitationsData() {

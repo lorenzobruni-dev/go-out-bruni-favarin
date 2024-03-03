@@ -11,22 +11,6 @@ import java.util.Properties
 class FirebaseDBHelper {
 
     companion object {
-      //  val auth = FirebaseAuth.getInstance()
-        //private val properties = Properties().apply {
-          //  javaClass.getResourceAsStream("../../../config/config.properties").use { inputStream ->
-            //    load(inputStream)
-           // }
-        //}
-
-        //private val URL = properties.getProperty("DATABASE_URL")
-        //private val firebaseDatabase = FirebaseDatabase.getInstance(URL)
-        //var dbUsers: DatabaseReference
-        //var dbEvents: DatabaseReference
-
-        //init {
-          //  dbUsers = firebaseDatabase.getReference("Users")
-            //dbEvents = firebaseDatabase.getReference("Events")
-        //}
 
         var auth = FirebaseAuth.getInstance()
         val dbUsers = FirebaseDatabase

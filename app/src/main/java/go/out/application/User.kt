@@ -10,7 +10,4 @@ data class User (
 ) {
     private val dbReference = FirebaseDBHelper.dbUsers.child("user")
     constructor(): this("", "", "", "", null, null)
-
-
-
 }

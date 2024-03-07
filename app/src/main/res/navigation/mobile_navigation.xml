@@ -14,5 +14,5 @@
         android:id="@+id/nav_create"
         android:name="go.out.application.ui.event.creation.CreationEventFragment"
         android:label="@string/menu_new_event"
-        tools:layout="@layout/fragment_creation_event" />
+        tools:layout="@layout/creation_event" />
 </navigation>

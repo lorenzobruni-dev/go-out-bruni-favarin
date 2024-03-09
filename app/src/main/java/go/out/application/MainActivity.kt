@@ -3,8 +3,11 @@ package go.out.application
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
+import android.util.Log
 import android.view.Menu
 import android.widget.EditText
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.android.material.snackbar.Snackbar
@@ -16,19 +19,26 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import go.out.application.FirebaseDBHelper.Companion.auth
 import go.out.application.databinding.ActivityMainBinding
-import go.out.application.ui.event.creation.CreationEventViewModel
 
 class MainActivity : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        auth = FirebaseAuth.getInstance()
+        var currentUser = auth.currentUser!!
+        val userID = currentUser?.uid
+        val emailUser = currentUser.email
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
@@ -53,6 +63,28 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
+        val headerView = navView.getHeaderView(0)
+        val navUserEmailTextView: TextView = headerView.findViewById(R.id.textView)
+        navUserEmailTextView.text = emailUser
+
+        if (userID != null) {
+            val db = FirebaseDBHelper.dbUsers.child(userID)
+            db.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    if (dataSnapshot.exists()) {
+                        val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
+                        if (nomeUtente != null) {
+                            val navUserName: TextView = headerView.findViewById(R.id.textViewNome)
+                            navUserName.text = nomeUtente
+                        }
+                    }
+                }
+                override fun onCancelled(databaseError: DatabaseError) {
+                    // Handle possible errors
+                }
+            })
+        }
+
     }
 
     private fun showAddFriendDialog() {
@@ -65,14 +97,14 @@ class MainActivity : AppCompatActivity() {
 
         builder.setPositiveButton("Ricerca") { dialog, _ ->
             val email = inputEmail.text.toString()
-           FirebaseDBHelper.searchUserByEmail(email) { friendID, message ->
-               if (friendID != null) {
-                   Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-               } else {
-                   Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-               }
-               dialog.dismiss()
-           }
+            FirebaseDBHelper.searchUserByEmail(email) { friendID, message ->
+                if (friendID != null) {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+                }
+                dialog.dismiss()
+            }
         }
         builder.setNegativeButton("annulla") { dialog, _ ->
             dialog.dismiss()
@@ -96,4 +128,5 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 }

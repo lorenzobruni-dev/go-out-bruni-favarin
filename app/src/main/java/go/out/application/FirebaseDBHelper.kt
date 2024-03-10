@@ -93,11 +93,49 @@ class FirebaseDBHelper {
         }
 
         fun getNomiContatti(userId: String, onComplete: (List<User>) -> Unit) {
-            // Implementazione necessaria
+            val contattiReference = dbUsers.child(userId).child("contatti")
+
+            contattiReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val contattiList = mutableListOf<User>()
+
+                    for (contattoSnapshot in snapshot.children) {
+                        val contattoId = contattoSnapshot.getValue(String::class.java)
+                        if (contattoId != null) {
+                            getUtenteDaID(contattoId) { utente ->
+                                contattiList.add(utente!!)
+
+                                if (contattiList.size == snapshot.childrenCount.toInt()) {
+                                    onComplete(contattiList)
+                                }
+                            }
+                        }
+                    }
+                    if (snapshot.childrenCount == 0L) {
+                        onComplete(contattiList)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onComplete(emptyList())
+                }
+
+            })
         }
 
         fun getUtenteDaID(userId: String, onComplete: (User?) -> Unit) {
-            // Implementazione necessaria
+            val userReference = dbUsers.child(userId)
+
+            userReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val utente = snapshot.getValue(User::class.java)
+                    onComplete(utente)
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    onComplete(null)
+                }
+            })
         }
 
         fun getInvitedEvents(userId: String, callback: (List<Event>, List<String>) -> Unit) {

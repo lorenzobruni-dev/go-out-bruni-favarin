@@ -19,6 +19,7 @@ import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -26,6 +27,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import go.out.application.FirebaseDBHelper.Companion.auth
 import go.out.application.databinding.ActivityMainBinding
+import go.out.application.ui.gallery.ContactsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -85,7 +87,21 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
+        navView.setNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.nav_friends -> {
+                    // Apre il fragment ContactsFragment quando si clicca sull'item "nav_friends"
+                    navController.navigate(R.id.nav_gallery)
+                }
+                // Aggiungi qui la logica per gestire gli altri item del menu di navigazione, se necessario
+            }
+            // Chiude il drawer layout dopo che l'item del menu è stato selezionato
+            drawerLayout.closeDrawer(GravityCompat.START)
+            true
+        }
     }
+
+
 
     private fun showAddFriendDialog() {
         val builder = AlertDialog.Builder(this)

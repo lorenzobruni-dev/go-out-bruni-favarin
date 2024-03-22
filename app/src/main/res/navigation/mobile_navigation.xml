@@ -10,16 +10,9 @@
         android:name="go.out.application.ui.home.HomeFragment"
         android:label="@string/menu_home"
         tools:layout="@layout/fragment_home" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="go.out.application.ui.gallery.GalleryFragment"
-        android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_gallery" />
-
     <fragment
         android:id="@+id/nav_create"
         android:name="go.out.application.ui.event.creation.CreationEventFragment"
-        android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_creation_event" />
+        android:label="@string/menu_new_event"
+        tools:layout="@layout/creation_event" />
 </navigation>

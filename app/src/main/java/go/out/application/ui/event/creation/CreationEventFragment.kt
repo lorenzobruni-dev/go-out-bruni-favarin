@@ -1,15 +1,18 @@
 package go.out.application.ui.event.creation
 
-import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ContentValues.TAG
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
+import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import go.out.application.R
@@ -19,8 +22,9 @@ import java.util.Locale
 class CreationEventFragment : Fragment() {
 
     private val viewModel: CreationEventViewModel by viewModels()
-    val minDateInMillis = System.currentTimeMillis()
+    private val minDateInMillis = System.currentTimeMillis()
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -39,14 +43,13 @@ class CreationEventFragment : Fragment() {
         val hours = calendar.get(Calendar.HOUR_OF_DAY)
         val minutes = calendar.get(Calendar.MINUTE)
 
-
+        val btn_saveChanges = view.findViewById<Button>(R.id.btn_create_event)
 
         ediTextData?.setOnClickListener{
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
                 DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDayOfMonth  ->
                     val selectedDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
-                    Log.d(TAG,selectedDate.toString() + editTextNameEvent?.text.toString())
                     ediTextData.setText(selectedDate)
                 },
                 year, month, dayOfMonth
@@ -66,11 +69,27 @@ class CreationEventFragment : Fragment() {
                 minutes,
                 true
             )
-
             timePickerDialog.show()
         }
 
-        viewModel.saveEvent(editTextNameEvent.toString(), ediTextData?.text.toString(), editTextOra?.text.toString())
+        btn_saveChanges.setOnClickListener {
+            var isPossibleToSendInvite =
+                editTextNameEvent?.text.toString().isNotEmpty() &&
+                ediTextData?.text.toString().isNotEmpty() &&
+                editTextOra?.text.toString().isNotEmpty()
+
+            Log.d(TAG , isPossibleToSendInvite.toString())
+
+            if(isPossibleToSendInvite)
+                viewModel.saveEvent(
+                    requireContext(),
+                    editTextNameEvent?.text.toString(),
+                    ediTextData?.text.toString(),
+                    editTextOra?.text.toString()
+                )
+            else Toast.makeText(requireContext(),"Errore nell'inserimento" , Toast.LENGTH_SHORT).show()
+        }
+
         return view
     }
     override fun onDestroy() {

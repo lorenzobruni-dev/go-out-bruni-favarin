@@ -9,6 +9,10 @@
             android:icon="@drawable/home_nav_bar"
             android:title="@string/menu_home" />
         <item
+            android:id="@+id/nav_friends"
+            android:icon="@drawable/friend"
+            android:title="@string/contacts" />
+        <item
             android:id="@+id/nav_addContact"
             android:icon="@drawable/add"
             android:title="@string/menu_add_contatto" />

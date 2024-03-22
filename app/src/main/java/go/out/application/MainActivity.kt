@@ -3,31 +3,26 @@ package go.out.application
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
-import android.util.Log
 import android.view.Menu
 import android.widget.EditText
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import com.google.android.material.snackbar.Snackbar
-import com.google.android.material.navigation.NavigationView
+import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import androidx.navigation.ui.setupWithNavController
-import androidx.drawerlayout.widget.DrawerLayout
-import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.GravityCompat
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import go.out.application.FirebaseDBHelper.Companion.auth
 import go.out.application.databinding.ActivityMainBinding
-import go.out.application.ui.gallery.ContactsFragment
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,7 +54,7 @@ class MainActivity : AppCompatActivity() {
         // menu should be considered as top level destinations.
         appBarConfiguration = AppBarConfiguration(
             setOf(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_create
+                R.id.nav_home, R.id.nav_friends, R.id.nav_create
             ), drawerLayout
         )
         setupActionBarWithNavController(navController, appBarConfiguration)
@@ -87,18 +82,6 @@ class MainActivity : AppCompatActivity() {
             })
         }
 
-        navView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.nav_friends -> {
-                    // Apre il fragment ContactsFragment quando si clicca sull'item "nav_friends"
-                    navController.navigate(R.id.nav_gallery)
-                }
-                // Aggiungi qui la logica per gestire gli altri item del menu di navigazione, se necessario
-            }
-            // Chiude il drawer layout dopo che l'item del menu è stato selezionato
-            drawerLayout.closeDrawer(GravityCompat.START)
-            true
-        }
     }
 
 

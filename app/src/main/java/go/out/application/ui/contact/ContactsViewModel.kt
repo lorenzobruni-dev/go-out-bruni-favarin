@@ -1,4 +1,4 @@
-package go.out.application.ui.gallery
+package go.out.application.ui.contact
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

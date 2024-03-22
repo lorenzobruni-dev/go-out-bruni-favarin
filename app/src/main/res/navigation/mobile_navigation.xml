@@ -13,7 +13,7 @@
 
     <fragment
         android:id="@+id/nav_friends"
-        android:name="go.out.application.ui.gallery.ContactsFragment"
+        android:name="go.out.application.ui.contact.ContactsFragment"
         android:label="@string/contacts"
         tools:layout="@layout/fragment_contacts" />
 

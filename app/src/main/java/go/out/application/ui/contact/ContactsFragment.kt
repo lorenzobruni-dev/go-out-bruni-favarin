@@ -1,24 +1,19 @@
-package go.out.application.ui.gallery
+package go.out.application.ui.contact
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ListView
-import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModelProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
 import go.out.application.FirebaseDBHelper
 import go.out.application.R
 import go.out.application.User
-import go.out.application.databinding.FragmentContactsBinding
-import go.out.application.ui.event.creation.CreationEventViewModel
 
 class ContactsFragment : Fragment() {
 

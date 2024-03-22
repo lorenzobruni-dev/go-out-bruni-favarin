@@ -1,4 +1,4 @@
-package go.out.application.ui.gallery
+package go.out.application.ui.contact
 
 import android.content.Context
 import android.view.LayoutInflater

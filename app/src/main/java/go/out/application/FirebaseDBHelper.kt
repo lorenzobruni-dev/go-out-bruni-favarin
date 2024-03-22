@@ -1,12 +1,14 @@
 package go.out.application
 
-import android.content.ContentValues.TAG
 import android.util.Log
-import android.widget.ListView
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.*
-import java.util.Properties
+import com.google.firebase.database.ChildEventListener
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import go.out.application.ui.event.creation.Confirmation
+import go.out.application.ui.event.creation.Event
 
 class FirebaseDBHelper {
 
@@ -20,13 +22,6 @@ class FirebaseDBHelper {
         val dbEvents = FirebaseDatabase
             .getInstance("https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("Events")
-
-        fun getDbUsersReference(){
-            dbUsers
-        }
-        fun getDbEventsReference(){
-            dbEvents
-        }
 
         fun readUser(userEventListener: ChildEventListener) {
             dbUsers.addChildEventListener(userEventListener)
@@ -206,20 +201,61 @@ class FirebaseDBHelper {
             })
         }
 
-        fun addEvent(event: Any, onComplete: (Boolean) -> Unit) {
-            // Implementazione necessaria
-        }
-
         fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
             // Implementazione necessaria
         }
 
-        fun getUserNamesFromIds(userIds: List<String>, onComplete: (List<String>) -> Unit) {
-            // Implementazione necessaria
+        fun addEvent(event: Event, onComplete: (Boolean) -> Unit) {
+            val eventReference = dbEvents.push()
+            val eventID = eventReference.key
+            event.id = eventID
+
+            eventReference.setValue(event)
+                .addOnSuccessListener {
+                    onComplete(true)
+                }
+                .addOnFailureListener {
+                    onComplete(false)
+                }
         }
 
-        fun addEventToCurrentUser(selectedEvent: Event?, any: Any) {
+        fun addEventToCurrentUser(
+            selectedEvent: Event?,
+            onComplete: (Boolean) -> Unit
+        ) {
+            val firebaseUser = auth.currentUser
+            if (firebaseUser != null) {
+                val currentUserRef = dbUsers.child(firebaseUser.uid)
+                currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        val currentUser = snapshot.getValue(User::class.java)
+                        currentUser?.let {
 
+                            val updateEvents = it.eventi?.toMutableList() ?: mutableListOf()
+                            updateEvents.add(selectedEvent?.id ?: "")
+                            currentUserRef.child("eventi").setValue(updateEvents)
+
+
+                            selectedEvent?.let {
+                                val confirmedList = it.confermati ?: mutableListOf()
+
+
+                                val currentUserConfirmation = Confirmation(currentUser.nome, currentUser.email)
+                                confirmedList.add(currentUserConfirmation)
+
+
+                                selectedEvent.confermati = confirmedList
+                                dbEvents.child(selectedEvent.id!!).setValue(selectedEvent)
+                                onComplete(true)
+                            }
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        onComplete(false)
+                    }
+                })
+            }
         }
         fun buildEventDetailsMessage(event: Event): String {
             val stringBuilder = StringBuilder()

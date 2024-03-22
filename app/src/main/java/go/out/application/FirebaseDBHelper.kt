@@ -262,7 +262,6 @@ class FirebaseDBHelper {
             stringBuilder.append("Nome: ${event.nome}\n")
             stringBuilder.append("Data: ${event.data}\n")
             stringBuilder.append("Ora: ${event.ora}\n")
-            stringBuilder.append("Luogo: ${event.luogo}\n")
 
             stringBuilder.append("\nConfermati:\n")
             event.confermati?.let { confermatiList ->

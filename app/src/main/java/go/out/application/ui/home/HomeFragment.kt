@@ -62,10 +62,11 @@ class HomeFragment : Fragment() {
             } else {
                 messageTextView?.visibility = View.GONE
                 listView?.visibility = View.VISIBLE
+                val primiElementi = confirmedEventsList.take(1)
                 adapter = EventAdapter(
                     requireContext(),
                     R.layout.event_invitations,
-                    confirmedEventsList,
+                    primiElementi,
                     layoutInflater,
                     currentUser,
                     false

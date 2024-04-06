@@ -2,10 +2,8 @@ package go.out.application.ui.event.creation
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -77,8 +75,6 @@ class CreationEventFragment : Fragment() {
                 editTextNameEvent?.text.toString().isNotEmpty() &&
                 ediTextData?.text.toString().isNotEmpty() &&
                 editTextOra?.text.toString().isNotEmpty()
-
-            Log.d(TAG , isPossibleToSendInvite.toString())
 
             if(isPossibleToSendInvite)
                 viewModel.saveEvent(

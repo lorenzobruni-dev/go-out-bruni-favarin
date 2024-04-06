@@ -1,60 +1,96 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <EditText
-        android:id="@+id/editTextNome"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="76dp"
-        android:hint="Nome evento"
-        android:inputType="text"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editTextData"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="76dp"
-        android:hint="Data evento"
-        android:inputType="date"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNome"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
-    <EditText
-        android:id="@+id/editTextOra"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="76dp"
-        android:hint="Ora evento"
-        android:inputType="time"
+    <ScrollView
+        android:layout_width="384dp"
+        android:layout_height="446dp"
         app:layout_constraintBottom_toTopOf="@+id/btn_create_event"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextData"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintHorizontal_bias="0.592"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.639">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <EditText
+                android:id="@+id/editTextNome"
+                android:layout_width="266dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="40dp"
+                android:layout_marginEnd="76dp"
+                android:hint="Nome evento"
+                android:inputType="text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/editTextData"
+                android:layout_width="266dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="76dp"
+                android:hint="Data evento"
+                android:inputType="date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextNome"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="MissingConstraints" />
+
+            <EditText
+                android:id="@+id/editTextOra"
+                android:layout_width="266dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="76dp"
+                android:hint="Ora evento"
+                android:inputType="time"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextData"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="MissingConstraints" />
+
+            <AutoCompleteTextView
+                android:id="@+id/addAddress"
+                android:layout_width="266dp"
+                android:layout_height="54dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginEnd="76dp"
+                android:dropDownWidth="match_parent"
+                android:dropDownHeight="wrap_content"
+                android:hint="Indirizzo evento"
+                android:inputType="textPostalAddress"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editTextOra"
+                app:layout_constraintVertical_bias="0.0"
+                tools:ignore="MissingConstraints" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
 
     <Button
         android:id="@+id/btn_create_event"
         android:layout_width="316dp"
         android:layout_height="44dp"
-        android:layout_marginTop="292dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="80dp"
         android:background="@drawable/border_black"
         android:text="Save Changes"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextOra"
+        app:layout_constraintHorizontal_bias="0.493"
+        app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

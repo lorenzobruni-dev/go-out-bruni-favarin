@@ -45,6 +45,4 @@ class CreationEventViewModel : ViewModel() {
             }
         }
     }
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun getRightLocation(){}
 }

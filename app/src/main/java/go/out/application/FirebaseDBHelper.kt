@@ -37,7 +37,8 @@ class FirebaseDBHelper {
                 dbUsers.orderByChild("email").equalTo(emailAmico)
                     .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            val amicoTrovato = snapshot.children.firstOrNull()?.getValue(User::class.java)
+                            val amicoTrovato =
+                                snapshot.children.firstOrNull()?.getValue(User::class.java)
                             if (amicoTrovato != null && amicoTrovato.id != user.uid) {
                                 val idAmico = amicoTrovato.id
                                 // Aggiungi amico ai contatti dell'utente corrente
@@ -52,6 +53,7 @@ class FirebaseDBHelper {
                                 callback(null, "Utente non trovato o stesso utente")
                             }
                         }
+
                         override fun onCancelled(error: DatabaseError) {
                             callback(null, "Errore durante la ricerca")
                         }
@@ -60,6 +62,7 @@ class FirebaseDBHelper {
                 callback(null, "Errore in fase di autenticazione dell'utente")
             }
         }
+
         fun aggiornaContattiUtente(userId: String, friendId: String, callback: (String?) -> Unit) {
             val currentUserRef = dbUsers.child(userId)
             currentUserRef.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -81,6 +84,7 @@ class FirebaseDBHelper {
                         }
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     callback(error.message)
                 }
@@ -147,6 +151,7 @@ class FirebaseDBHelper {
                     }
                     callback(eventsList, eventsIdsList)
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                 }
             })
@@ -164,11 +169,12 @@ class FirebaseDBHelper {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     val user = snapshot.getValue(User::class.java)
                     // Verifica se l'utente esiste e ha degli eventi nel campo "eventi"
-                    if (user != null && user.eventi?.isNotEmpty()==true) {
+                    if (user != null && user.eventi?.isNotEmpty() == true) {
                         // Itera attraverso gli ID degli eventi nell'elenco dell'utente
                         user.eventi!!.forEach { eventId ->
                             // Ottieni il riferimento all'evento nel database
-                            val eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+                            val eventRef =
+                                FirebaseDatabase.getInstance().getReference("Events").child(eventId)
                             // Leggi i dati dell'evento dal database Firebase
                             eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(eventSnapshot: DataSnapshot) {
@@ -183,9 +189,13 @@ class FirebaseDBHelper {
                                         callback(confirmedList, eventNamesList)
                                     }
                                 }
+
                                 override fun onCancelled(error: DatabaseError) {
                                     // Gestisci eventuali errori di lettura dal database
-                                    Log.e("FirebaseDBHelper", "Errore durante la lettura dell'evento: ${error.message}")
+                                    Log.e(
+                                        "FirebaseDBHelper",
+                                        "Errore durante la lettura dell'evento: ${error.message}"
+                                    )
                                 }
                             })
                         }
@@ -194,14 +204,22 @@ class FirebaseDBHelper {
                         callback(confirmedList, eventNamesList)
                     }
                 }
+
                 override fun onCancelled(error: DatabaseError) {
                     // Gestisci eventuali errori di lettura dal database
-                    Log.e("FirebaseDBHelper", "Errore durante la lettura dell'utente: ${error.message}")
+                    Log.e(
+                        "FirebaseDBHelper",
+                        "Errore durante la lettura dell'utente: ${error.message}"
+                    )
                 }
             })
         }
 
-        fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
+        fun removeParticipantFromEvent(
+            eventId: String,
+            userId: String,
+            onComplete: (Boolean) -> Unit
+        ) {
             // Implementazione necessaria
         }
 
@@ -217,6 +235,24 @@ class FirebaseDBHelper {
                 .addOnFailureListener {
                     onComplete(false)
                 }
+        }
+
+        fun getNomiContattiForCreationEvent() {
+            val reference = dbUsers.child("contatti")
+
+            reference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(dataSnapshot: DataSnapshot) {
+                    for (childSnapshot in dataSnapshot.children) {
+                        val id = childSnapshot.key
+
+                    }
+                }
+
+                override fun onCancelled(databaseError: DatabaseError) {
+                    /*None*/
+                }
+
+            })
         }
 
         fun addEventToCurrentUser(
@@ -240,7 +276,8 @@ class FirebaseDBHelper {
                                 val confirmedList = it.confermati ?: mutableListOf()
 
 
-                                val currentUserConfirmation = Confirmation(currentUser.nome, currentUser.email)
+                                val currentUserConfirmation =
+                                    Confirmation(currentUser.nome, currentUser.email)
                                 confirmedList.add(currentUserConfirmation)
 
 
@@ -257,6 +294,7 @@ class FirebaseDBHelper {
                 })
             }
         }
+
         fun buildEventDetailsMessage(event: Event): String {
             val stringBuilder = StringBuilder()
             stringBuilder.append("Nome: ${event.nome}\n")

@@ -11,11 +11,12 @@
         android:layout_height="54dp"
         android:layout_marginTop="40dp"
         android:layout_marginEnd="76dp"
-        android:hint="Nome evento"
+        android:hint="@string/name_event"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints" />
+        tools:ignore="MissingConstraints"
+    />
 
     <EditText
         android:id="@+id/editTextData"
@@ -23,7 +24,7 @@
         android:layout_height="54dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="76dp"
-        android:hint="Data evento"
+        android:hint="@string/date_event"
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextNome"
@@ -35,26 +36,40 @@
         android:layout_height="54dp"
         android:layout_marginTop="18dp"
         android:layout_marginEnd="76dp"
-        android:hint="Ora evento"
+        android:hint="@string/hour_event"
         android:inputType="time"
         app:layout_constraintBottom_toTopOf="@+id/btn_create_event"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextData"
         app:layout_constraintVertical_bias="0.0"
+        tools:ignore="MissingConstraints"
+    />
+
+    <Spinner
+        android:id="@+id/spinnerContatti"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="76dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/editTextOra"
         tools:ignore="MissingConstraints" />
 
     <Button
         android:id="@+id/btn_create_event"
         android:layout_width="316dp"
         android:layout_height="44dp"
-        android:layout_marginTop="292dp"
-        android:layout_marginEnd="44dp"
+        android:layout_marginTop="192dp"
+        android:layout_marginEnd="48dp"
         android:background="@drawable/border_black"
-        android:text="Save Changes"
+        android:text="@string/button_save_event"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextOra"
         tools:ignore="MissingConstraints" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

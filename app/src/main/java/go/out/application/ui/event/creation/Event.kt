@@ -23,6 +23,7 @@ data class Event (
         data = item.data
         ora = item.ora
         creatore = item.creatore
+        partecipanti = item.partecipanti
     }
 
 }

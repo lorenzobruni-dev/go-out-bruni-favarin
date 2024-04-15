@@ -1,5 +1,7 @@
 package go.out.application.ui.event.creation
 
+import FriendsAdapter
+import StateVO
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ContentValues.TAG
@@ -11,6 +13,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -31,7 +34,14 @@ class CreationEventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val view = inflater.inflate(R.layout.creation_event , container , false)
+        val contatti =
+            listOf(StateVO().apply { title = "Seleziona amici" },
+                StateVO().apply { title = "Contatto 2" },
+                StateVO().apply { title = "Contatto 3" })
+
+        val contactsToSend = contatti.subList(1, contatti.size).map { it.title }
+
+        val view = inflater.inflate(R.layout.creation_event, container, false)
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
         val month = calendar.get(Calendar.MONTH)
@@ -39,16 +49,17 @@ class CreationEventFragment : Fragment() {
         val ediTextData = view?.findViewById<EditText>(R.id.editTextData)
         val editTextOra = view?.findViewById<EditText>(R.id.editTextOra)
         val editTextNameEvent = view?.findViewById<EditText>(R.id.editTextNome)
+        val spinnerContatti = view?.findViewById<Spinner>(R.id.spinnerContatti)
 
         val hours = calendar.get(Calendar.HOUR_OF_DAY)
         val minutes = calendar.get(Calendar.MINUTE)
 
         val btn_saveChanges = view.findViewById<Button>(R.id.btn_create_event)
 
-        ediTextData?.setOnClickListener{
+        ediTextData?.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
                 requireContext(),
-                DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDayOfMonth  ->
+                DatePickerDialog.OnDateSetListener { _, selectedYear, selectedMonth, selectedDayOfMonth ->
                     val selectedDate = "$selectedDayOfMonth/${selectedMonth + 1}/$selectedYear"
                     ediTextData.setText(selectedDate)
                 },
@@ -58,11 +69,16 @@ class CreationEventFragment : Fragment() {
             datePickerDialog.datePicker.minDate = minDateInMillis
             datePickerDialog.show()
         }
-        editTextOra?.setOnClickListener{
+        editTextOra?.setOnClickListener {
             val timePickerDialog = TimePickerDialog(
                 requireContext(),
                 TimePickerDialog.OnTimeSetListener { _, selectedHourOfDay, selectedMinute ->
-                    val selectedTime = String.format(Locale.getDefault(), "%02d:%02d", selectedHourOfDay, selectedMinute)
+                    val selectedTime = String.format(
+                        Locale.getDefault(),
+                        "%02d:%02d",
+                        selectedHourOfDay,
+                        selectedMinute
+                    )
                     editTextOra.setText(selectedTime)
                 },
                 hours,
@@ -75,23 +91,31 @@ class CreationEventFragment : Fragment() {
         btn_saveChanges.setOnClickListener {
             var isPossibleToSendInvite =
                 editTextNameEvent?.text.toString().isNotEmpty() &&
-                ediTextData?.text.toString().isNotEmpty() &&
-                editTextOra?.text.toString().isNotEmpty()
+                        ediTextData?.text.toString().isNotEmpty() &&
+                        editTextOra?.text.toString().isNotEmpty() &&
+                        contactsToSend.isNotEmpty()
 
-            Log.d(TAG , isPossibleToSendInvite.toString())
-
-            if(isPossibleToSendInvite)
+            if (isPossibleToSendInvite)
                 viewModel.saveEvent(
                     requireContext(),
                     editTextNameEvent?.text.toString(),
                     ediTextData?.text.toString(),
-                    editTextOra?.text.toString()
+                    editTextOra?.text.toString(),
+                    contactsToSend
                 )
-            else Toast.makeText(requireContext(),"Errore nell'inserimento" , Toast.LENGTH_SHORT).show()
+            else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
+                .show()
         }
+        val adapter = FriendsAdapter(requireContext(), R.layout.spinner_item_checkbox, contatti)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
+
+        if (spinnerContatti != null) {
+            spinnerContatti.adapter = adapter
+        }
         return view
     }
+
     override fun onDestroy() {
         super.onDestroy()
     }

@@ -13,6 +13,9 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import go.out.application.R
 import java.util.Calendar
 import java.util.Locale
@@ -69,6 +72,25 @@ class CreationEventFragment : Fragment() {
             )
             timePickerDialog.show()
         }
+
+        val autocompleteFragment =
+            childFragmentManager.findFragmentById(R.id.addAddress) as AutocompleteSupportFragment
+
+        autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+            override fun onPlaceSelected(place: Place) {
+                // Handle the selected place
+                val address = place.name
+                // Do whatever you want with the selected address
+            }
+
+            override fun onError(status: com.google.android.gms.common.api.Status) {
+                // Handle the error
+                // For example, you can show a toast message
+                Toast.makeText(requireContext(), "An error occurred: ${status.statusMessage}", Toast.LENGTH_SHORT).show()
+            }
+        })
 
         btn_saveChanges.setOnClickListener {
             var isPossibleToSendInvite =

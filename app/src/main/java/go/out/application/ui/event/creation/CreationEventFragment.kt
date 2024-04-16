@@ -22,10 +22,16 @@ import go.out.application.R
 import java.util.Calendar
 import java.util.Locale
 
-class CreationEventFragment : Fragment() {
+class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
 
     private val viewModel: CreationEventViewModel by viewModels()
     private val minDateInMillis = System.currentTimeMillis()
+    private val contatti =
+        listOf(StateVO().apply { title = "Seleziona amici"},
+            StateVO().apply { title = "Contatto 2" },
+            StateVO().apply { title = "Contatto 3" })
+
+    private var contactsMap: List<String> = mutableListOf()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -34,12 +40,7 @@ class CreationEventFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
 
-        val contatti =
-            listOf(StateVO().apply { title = "Seleziona amici" },
-                StateVO().apply { title = "Contatto 2" },
-                StateVO().apply { title = "Contatto 3" })
-
-        val contactsToSend = contatti.subList(1, contatti.size).map { it.title }
+        Log.d(TAG, "Bellali")
 
         val view = inflater.inflate(R.layout.creation_event, container, false)
         val calendar = Calendar.getInstance()
@@ -93,7 +94,7 @@ class CreationEventFragment : Fragment() {
                 editTextNameEvent?.text.toString().isNotEmpty() &&
                         ediTextData?.text.toString().isNotEmpty() &&
                         editTextOra?.text.toString().isNotEmpty() &&
-                        contactsToSend.isNotEmpty()
+                        contactsMap.isNotEmpty()
 
             if (isPossibleToSendInvite)
                 viewModel.saveEvent(
@@ -101,13 +102,14 @@ class CreationEventFragment : Fragment() {
                     editTextNameEvent?.text.toString(),
                     ediTextData?.text.toString(),
                     editTextOra?.text.toString(),
-                    contactsToSend
+                    contactsMap
                 )
             else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
                 .show()
         }
         val adapter = FriendsAdapter(requireContext(), R.layout.spinner_item_checkbox, contatti)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter.setStateChangeListener(this)
 
         if (spinnerContatti != null) {
             spinnerContatti.adapter = adapter
@@ -117,5 +119,11 @@ class CreationEventFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onStateChanged() {
+        contactsMap = contatti
+            .filter { it.selected }
+            .map { it.title }
     }
 }

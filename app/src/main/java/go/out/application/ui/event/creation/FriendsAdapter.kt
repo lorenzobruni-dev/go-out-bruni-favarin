@@ -9,12 +9,22 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import go.out.application.R
 
+
 class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
     ArrayAdapter<StateVO>(context, resource, objects)  {
+
+    interface StateChangeListener {
+        fun onStateChanged()
+    }
 
     private val mContext: Context = context
     private val listState: List<StateVO> = objects
     private var numberOfFriendsSelected : Int = 0
+    private var stateChangeListener: StateChangeListener? = null
+
+    fun setStateChangeListener(listener: StateChangeListener) {
+        this.stateChangeListener = listener
+    }
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         return getCustomView(position, convertView, parent)
     }
@@ -42,7 +52,6 @@ class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
         holder.mCheckBox.setOnCheckedChangeListener(null)
         holder.mCheckBox.isChecked = listState[position].selected == true
         if (position == 0) {
-            holder.mTextView.setTextColor(ContextCompat.getColor(mContext, R.color.color_dropdown))
             holder.mCheckBox.visibility = View.INVISIBLE
         } else {
             holder.mCheckBox.visibility = View.VISIBLE
@@ -55,6 +64,7 @@ class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
                 ?.let { "${numberOfFriendsSelected} Amici selezionati" }
                 ?: "Seleziona amici"
             listState[position].selected = isChecked
+            stateChangeListener?.onStateChanged()
         }
 
 

@@ -109,7 +109,6 @@ class CreationEventFragment : Fragment() {
         val adapter = FriendsAdapter(requireContext(), R.layout.spinner_item_checkbox, contatti)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
 
-
         if (spinnerContatti != null) {
             spinnerContatti.adapter = adapter
         }

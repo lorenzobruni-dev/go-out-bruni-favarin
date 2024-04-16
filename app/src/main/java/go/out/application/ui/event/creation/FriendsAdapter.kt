@@ -1,8 +1,5 @@
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.res.ColorStateList
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,14 +10,11 @@ import androidx.core.content.ContextCompat
 import go.out.application.R
 
 class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
-    ArrayAdapter<StateVO>(context, resource, objects) {
+    ArrayAdapter<StateVO>(context, resource, objects)  {
 
     private val mContext: Context = context
     private val listState: List<StateVO> = objects
-
-    fun getNumberOfSelected (friends: List<StateVO>): Int {
-        return friends.subList(1 , friends.size).count { it.selected }
-    }
+    private var numberOfFriendsSelected : Int = 0
     override fun getDropDownView(position: Int, convertView: View?, parent: ViewGroup): View {
         return getCustomView(position, convertView, parent)
     }
@@ -47,7 +41,6 @@ class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
 
         holder.mCheckBox.setOnCheckedChangeListener(null)
         holder.mCheckBox.isChecked = listState[position].selected == true
-
         if (position == 0) {
             holder.mTextView.setTextColor(ContextCompat.getColor(mContext, R.color.color_dropdown))
             holder.mCheckBox.visibility = View.INVISIBLE
@@ -56,9 +49,10 @@ class FriendsAdapter(context: Context, resource: Int, objects: List<StateVO>) :
         }
 
         holder.mCheckBox.setOnCheckedChangeListener { buttonView, isChecked ->
-            Log.d(TAG , getNumberOfSelected(listState).toString())
-            listState[0].title = listState.takeIf { it.isNotEmpty() }
-                ?.let { "${getNumberOfSelected(listState)} Amici selezionati" }
+            if(!listState[position].selected) numberOfFriendsSelected++
+            else numberOfFriendsSelected--
+            listState[0].title = numberOfFriendsSelected.takeIf { it > 0 }
+                ?.let { "${numberOfFriendsSelected} Amici selezionati" }
                 ?: "Seleziona amici"
             listState[position].selected = isChecked
         }

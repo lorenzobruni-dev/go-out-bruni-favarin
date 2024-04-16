@@ -1,12 +1,10 @@
 class StateVO {
     var title: String = ""
     var selected: Boolean = false
-    var spinnerPrompt: String = ""
     constructor()
 
-    constructor(title: String, selected: Boolean , prompt: String) {
+    constructor(title: String, selected: Boolean) {
         this.title = title
         this.selected = selected
-        this.spinnerPrompt = prompt
     }
 }

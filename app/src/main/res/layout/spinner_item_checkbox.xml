@@ -5,13 +5,13 @@
 
     <TextView
         android:id="@+id/text"
-        android:layout_width="310dp"
-        android:layout_height="31dp"
+        android:layout_width="637dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:textSize="18sp"
         android:layout_marginTop="10dp"
         android:text="Seleziona amici"
-        android:textAlignment="gravity" />
+        android:textAlignment="gravity"
+        android:textSize="18sp" />
 
     <CheckBox
         android:id="@+id/checkbox"

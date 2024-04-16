@@ -2,6 +2,7 @@ package go.out.application.ui.event.creation
 
 import FriendsAdapter
 import StateVO
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
 import android.content.ContentValues.TAG
@@ -14,11 +15,13 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import go.out.application.R
+import org.w3c.dom.Text
 import java.util.Calendar
 import java.util.Locale
 
@@ -33,6 +36,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
 
     private var contactsMap: List<String> = mutableListOf()
 
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +55,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
         val editTextOra = view?.findViewById<EditText>(R.id.editTextOra)
         val editTextNameEvent = view?.findViewById<EditText>(R.id.editTextNome)
         val spinnerContatti = view?.findViewById<Spinner>(R.id.spinnerContatti)
+        val titleSpinner = view.findViewById<TextView>(R.id.text)
 
         val hours = calendar.get(Calendar.HOUR_OF_DAY)
         val minutes = calendar.get(Calendar.MINUTE)

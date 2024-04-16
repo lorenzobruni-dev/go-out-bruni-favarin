@@ -1,7 +1,9 @@
 package go.out.application
 
 import android.app.AlertDialog
+import android.content.ContentValues.TAG
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -33,6 +35,7 @@ class EventAdapter(
             view = convertView
             holder = view.tag as ViewHolder
         }
+        Log.d(TAG , eventsList.map { it }.toString())
         val eventId = getItem(position)
         val selectedEvent = eventsList.find { it.id == eventId }
         holder.eventName?.text = selectedEvent?.nome ?: "Nome non disponibile"

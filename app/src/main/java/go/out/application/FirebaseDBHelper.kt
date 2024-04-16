@@ -1,5 +1,7 @@
 package go.out.application
 
+import StateVO
+import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
@@ -7,6 +9,7 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.getValue
 import go.out.application.ui.event.creation.Confirmation
 import go.out.application.ui.event.creation.Event
 
@@ -163,12 +166,12 @@ class FirebaseDBHelper {
 
             // Ottieni il riferimento al nodo dell'utente nel database
             val userRef = FirebaseDatabase.getInstance().getReference("Users").child(userId)
-
             // Aggiungi un listener per leggere i dati dell'utente dal database Firebase
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
+                    Log.d(TAG , snapshot.getValue(StateVO().title).toString())
                     val user = snapshot.getValue(User::class.java)
-                    // Verifica se l'utente esiste e ha degli eventi nel campo "eventi"
+
                     if (user != null && user.eventi?.isNotEmpty() == true) {
                         // Itera attraverso gli ID degli eventi nell'elenco dell'utente
                         user.eventi!!.forEach { eventId ->
@@ -237,15 +240,42 @@ class FirebaseDBHelper {
                 }
         }
 
-        fun getNomiContattiForCreationEvent() {
-            val reference = dbUsers.child("contatti")
+        fun getNomiContattiForCreationEvent(userId: String , callback: (List<String>) -> Unit) {
+            var friendsList : List<String> = mutableListOf()
+            val reference = dbUsers.child("Users").child(userId)
 
             reference.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    for (childSnapshot in dataSnapshot.children) {
-                        val id = childSnapshot.key
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val user = snapshot.getValue(User::class.java)
 
-                    }
+                    Log.d(TAG , user.toString())
+                    if (user != null && user.eventi?.isNotEmpty() == true) {
+
+                        user.eventi!!.forEach { eventId ->
+                            val eventRef = FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+
+                            eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
+                                override fun onDataChange(eventSnapshot: DataSnapshot) {
+                                    val event = eventSnapshot.getValue(Event::class.java)
+                                    // Verifica se l'evento esiste e aggiungilo alla lista degli eventi
+                                    if (event != null) {
+                                        Log.d(TAG , "${event.partecipanti?.map { it }}")
+                                        friendsList = event.partecipanti!!
+                                    }
+                                    if (friendsList.size == user.eventi!!.size) {
+                                        callback(friendsList)
+                                    }
+                                }
+
+                                override fun onCancelled(error: DatabaseError) {
+                                    Log.e(
+                                        "FirebaseDBHelper",
+                                        "Errore durante la lettura dell'evento: ${error.message}"
+                                    )
+                                }
+                            })
+                        }
+                    } else callback(friendsList)
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {

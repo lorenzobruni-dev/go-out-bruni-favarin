@@ -15,13 +15,11 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.Spinner
-import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import go.out.application.R
-import org.w3c.dom.Text
 import java.util.Calendar
 import java.util.Locale
 
@@ -44,7 +42,6 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
         savedInstanceState: Bundle?
     ): View? {
 
-        Log.d(TAG, "Bellali")
 
         val view = inflater.inflate(R.layout.creation_event, container, false)
         val calendar = Calendar.getInstance()
@@ -55,8 +52,6 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
         val editTextOra = view?.findViewById<EditText>(R.id.editTextOra)
         val editTextNameEvent = view?.findViewById<EditText>(R.id.editTextNome)
         val spinnerContatti = view?.findViewById<Spinner>(R.id.spinnerContatti)
-        val titleSpinner = view.findViewById<TextView>(R.id.text)
-
         val hours = calendar.get(Calendar.HOUR_OF_DAY)
         val minutes = calendar.get(Calendar.MINUTE)
 
@@ -95,6 +90,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
         }
 
         btn_saveChanges.setOnClickListener {
+            viewModel.getFriends()
             var isPossibleToSendInvite =
                 editTextNameEvent?.text.toString().isNotEmpty() &&
                         ediTextData?.text.toString().isNotEmpty() &&
@@ -121,6 +117,8 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener {
         }
         return view
     }
+
+
 
     override fun onDestroy() {
         super.onDestroy()

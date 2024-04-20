@@ -3,7 +3,6 @@ package go.out.application
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
-import android.view.Menu
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
@@ -22,7 +21,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.ValueEventListener
 import go.out.application.FirebaseDBHelper.Companion.auth
 import go.out.application.databinding.ActivityMainBinding
-import go.out.application.ui.event.creation.CreationEventViewModel
+import go.out.application.ui.login.LoginActivity
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,6 +50,7 @@ class MainActivity : AppCompatActivity() {
                 R.id.nav_home, R.id.nav_friends, R.id.nav_create
             ), drawerLayout
         )
+        
 
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)

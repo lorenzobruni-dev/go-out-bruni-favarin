@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.RegistrationActivity"
+    tools:context=".ui.registration.RegistrationActivity"
     android:id="@+id/table_layout">
+
 
     <TableRow
         android:layout_height="0dp"
@@ -20,6 +21,7 @@
             android:layout_span="1"
             android:layout_gravity="center_horizontal"
             app:srcCompat="@mipmap/logo_foreground" />
+
     </TableRow>
 
     <TableRow
@@ -137,13 +139,5 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp">
-
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="45dp"
-            android:layout_height="51dp"
-            android:layout_gravity="left|center_vertical"
-            android:src="@mipmap/ic_back_arrow" />
-
     </TableRow>
 </TableLayout>

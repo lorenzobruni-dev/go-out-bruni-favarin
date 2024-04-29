@@ -7,6 +7,7 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.widget.Toolbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -22,6 +23,7 @@ class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
+        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
 
         registrationViewModel = RegistrationViewModel(this) // Istanzia il ViewModel
 
@@ -39,12 +41,6 @@ class RegistrationActivity : AppCompatActivity() {
             val confirmPass = confPass.text.toString()
 
             registrationViewModel.registerUser(nome, email, password, confirmPass) // Delega la registrazione al ViewModel
-        }
-
-        val ret = findViewById<ImageView>(R.id.btn_back)
-        ret.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 }

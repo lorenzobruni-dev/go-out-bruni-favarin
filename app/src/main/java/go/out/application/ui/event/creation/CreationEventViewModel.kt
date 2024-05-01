@@ -1,5 +1,6 @@
 package go.out.application.ui.event.creation
 
+import PlaceInfo
 import android.content.Context
 import android.os.Build
 import android.widget.Toast
@@ -17,7 +18,7 @@ class CreationEventViewModel : ViewModel() {
     lateinit var newEvent: Event
 
     @RequiresApi(Build.VERSION_CODES.O)
-    fun saveEvent(context: Context, nome: String, data: String, ora: String) {
+    fun saveEvent(context: Context, nome: String, data: String, ora: String , placeInfo: PlaceInfo) {
         newEvent = Event()
         newEvent.set_event(
             Event(
@@ -27,6 +28,7 @@ class CreationEventViewModel : ViewModel() {
                 data,
                 ora,
                 null,
+                placeInfo,
                 null
             )
         )

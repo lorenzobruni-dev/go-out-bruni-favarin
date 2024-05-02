@@ -19,7 +19,6 @@ import androidx.fragment.app.viewModels
 import com.google.android.gms.common.api.Status
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment
@@ -103,9 +102,10 @@ class CreationEventFragment : Fragment(), OnMapReadyCallback {
         autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener{
             override fun onPlaceSelected(place: Place) {
                 selectedPlaceInfo = PlaceInfo(
-                    id = place.id ?: "",
-                    address = place.address ?: "",
-                    latLng = place.latLng ?: LatLng(0.0, 0.0)
+                    place.id ?: "",
+                    place.address ?: "",
+                    place.latLng?.latitude ?: 0.0,
+                    place.latLng?.longitude ?: 0.0
                 )
                 Log.d(TAG , selectedPlaceInfo?.address.toString())
                 autocompleteFragment.setText(selectedPlaceInfo?.address)

@@ -3,7 +3,6 @@ package go.out.application.ui.event.creation
 import PlaceInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
-import com.google.android.gms.maps.model.LatLng
 
 data class Confirmation(val nome: String?, val email: String?) {
     constructor() : this(null, null)
@@ -16,7 +15,7 @@ data class Event(
     var data: String?,
     var ora: String?,
     var partecipanti: List<String>?,
-    var place: PlaceInfo,
+    var place: PlaceInfo?,
     var confermati: MutableList<Confirmation>?
 ) {
 
@@ -28,7 +27,7 @@ data class Event(
         "",
         "",
         null,
-        PlaceInfo(id = "", address = "", latLng = LatLng(0.0, 0.0)),
+        null,
         null
     )
 

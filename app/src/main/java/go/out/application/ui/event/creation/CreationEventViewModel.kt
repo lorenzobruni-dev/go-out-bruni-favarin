@@ -1,5 +1,6 @@
 package go.out.application.ui.event.creation
 
+import PlaceInfo
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
@@ -27,7 +28,8 @@ class CreationEventViewModel : ViewModel() {
         nome: String,
         data: String,
         ora: String,
-        friends: List<String>
+        friends: List<String>,
+        placeInfo: PlaceInfo
     ) {
         newEvent = Event()
         newEvent.set_event(
@@ -38,6 +40,7 @@ class CreationEventViewModel : ViewModel() {
                 data,
                 ora,
                 friends,
+                placeInfo,
                 null
             )
         )

@@ -14,6 +14,7 @@
     <string name="menu_add_contatto">Aggiungi contatto</string>
     <string name="menu_new_event">Nuovo evento</string>
     <string name="menu_exit">Esci</string>
+    <string name="id_api_key">AIzaSyAOttNFQASJTO7XM1Xg0oZT2akP6KckfEg</string>
 
     <!--Creation Event string comment-->
     <string name="name_event">Nome Evento</string>

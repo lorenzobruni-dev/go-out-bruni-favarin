@@ -1,6 +1,5 @@
 package go.out.application
 
-import StateVO
 import android.content.ContentValues.TAG
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
@@ -9,8 +8,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.getValue
-import go.out.application.ui.event.creation.Confirmation
 import go.out.application.ui.event.creation.Event
 
 class FirebaseDBHelper {
@@ -169,7 +166,6 @@ class FirebaseDBHelper {
             // Aggiungi un listener per leggere i dati dell'utente dal database Firebase
             userRef.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    Log.d(TAG , snapshot.getValue(StateVO().title).toString())
                     val user = snapshot.getValue(User::class.java)
 
                     if (user != null && user.eventi?.isNotEmpty() == true) {
@@ -303,15 +299,6 @@ class FirebaseDBHelper {
 
 
                             selectedEvent?.let {
-                                val confirmedList = it.confermati ?: mutableListOf()
-
-
-                                val currentUserConfirmation =
-                                    Confirmation(currentUser.nome, currentUser.email)
-                                confirmedList.add(currentUserConfirmation)
-
-
-                                selectedEvent.confermati = confirmedList
                                 dbEvents.child(selectedEvent.id!!).setValue(selectedEvent)
                                 onComplete(true)
                             }
@@ -332,11 +319,6 @@ class FirebaseDBHelper {
             stringBuilder.append("Ora: ${event.ora}\n")
 
             stringBuilder.append("\nConfermati:\n")
-            event.confermati?.let { confermatiList ->
-                for (confermato in confermatiList) {
-                    stringBuilder.append("Nome: ${confermato.nome} (${confermato.email}\n)")
-                }
-            }
 
             return stringBuilder.toString()
         }

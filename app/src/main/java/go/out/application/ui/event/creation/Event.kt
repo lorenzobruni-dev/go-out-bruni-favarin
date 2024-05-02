@@ -4,9 +4,6 @@ import PlaceInfo
 import android.os.Build
 import androidx.annotation.RequiresApi
 
-data class Confirmation(val nome: String?, val email: String?) {
-    constructor() : this(null, null)
-}
 
 data class Event(
     var id: String?,
@@ -16,7 +13,6 @@ data class Event(
     var ora: String?,
     var partecipanti: List<String>?,
     var place: PlaceInfo?,
-    var confermati: MutableList<Confirmation>?
 ) {
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -28,7 +24,6 @@ data class Event(
         "",
         null,
         null,
-        null
     )
 
     fun set_event(item: Event) {

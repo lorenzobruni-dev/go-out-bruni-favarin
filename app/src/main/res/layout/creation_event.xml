@@ -5,66 +5,107 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <androidx.cardview.widget.CardView
+        android:id="@+id/editTextNomeCardView"
+        android:layout_width="316dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="48dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
     <EditText
         android:id="@+id/editTextNome"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="40dp"
-        android:layout_marginEnd="76dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:hint="@string/name_event"
         android:inputType="text"
         android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        tools:ignore="MissingConstraints"
-    />
+        android:background="@drawable/style_border"
+        android:padding="8dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"/>
+    </androidx.cardview.widget.CardView>
 
-    <EditText
-        android:id="@+id/editTextData"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
+
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/editTextDataCardView"
+        android:layout_width="316dp"
+        android:layout_height="74dp"
         android:layout_marginTop="18dp"
-        android:layout_marginEnd="76dp"
-        android:focusable="false"
-        android:focusableInTouchMode="true"
+        android:layout_marginEnd="48dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextNomeCardView">
+
+        <EditText
+        android:id="@+id/editTextData"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:hint="@string/date_event"
         android:inputType="date"
         android:textColorHint="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextNome"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints" />
-
-    <EditText
-        android:id="@+id/editTextOra"
-        android:layout_width="266dp"
-        android:layout_height="54dp"
-        android:layout_marginTop="18dp"
-        android:layout_marginEnd="76dp"
+        android:background="@drawable/style_border"
+        android:padding="8dp"
         android:focusable="false"
-        android:focusableInTouchMode="true"
-        android:hint="@string/hour_event"
-        android:textColorHint="@color/black"
-        android:inputType="time"
-        app:layout_constraintBottom_toTopOf="@+id/cardView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextData"
-        app:layout_constraintVertical_bias="0.0"
-        tools:ignore="MissingConstraints"
-    />
+        android:focusableInTouchMode="true"/>
+    </androidx.cardview.widget.CardView>
 
-    <Spinner
-        android:id="@+id/spinnerContatti"
-        android:layout_width="207dp"
-        android:layout_height="45dp"
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/editTextOraCardView"
+        android:layout_width="316dp"
+        android:layout_height="74dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="48dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editTextDataCardView">
+
+        <EditText
+            android:id="@+id/editTextOra"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/style_border"
+            android:focusable="false"
+            android:focusableInTouchMode="true"
+            android:hint="@string/hour_event"
+            android:inputType="time"
+            android:padding="8dp"
+            android:textColorHint="@color/black" />
+    </androidx.cardview.widget.CardView>
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/spinnerContattiCardView"
+        android:layout_width="316dp"
+        android:layout_height="74dp"
         android:layout_marginTop="20dp"
-        android:layout_marginEnd="76dp"
-        android:textColorHint="@color/black"
+        android:layout_marginEnd="48dp"
+        android:layout_marginStart="48dp"
+        app:cardCornerRadius="15dp"
+        app:cardElevation="4dp"
+        app:cardUseCompatPadding="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.539"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/editTextOra"
-        tools:ignore="MissingConstraints" />
+        app:layout_constraintTop_toBottomOf="@id/editTextOraCardView">
+
+        <Spinner
+            android:id="@+id/spinnerContatti"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColorHint="@color/black"
+            android:background="@drawable/style_border"
+            tools:ignore="MissingConstraints" />
+    </androidx.cardview.widget.CardView>
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -72,12 +113,12 @@
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="18dp"
         android:layout_marginBottom="16dp"
         app:cardCornerRadius="30dp"
-        app:layout_constraintTop_toBottomOf="@+id/editTextOra"
-        app:layout_constraintEnd_toEndOf="@+id/editTextOra"
-        app:layout_constraintStart_toStartOf="@+id/editTextOra">
+        app:layout_constraintTop_toBottomOf="@+id/spinnerContattiCardView"
+        app:layout_constraintEnd_toEndOf="@+id/spinnerContattiCardView"
+        app:layout_constraintStart_toStartOf="@+id/spinnerContattiCardView">
         <androidx.fragment.app.FragmentContainerView
             android:id="@+id/autoComplete_fragment"
             android:layout_width="match_parent"
@@ -85,19 +126,21 @@
             android:name="com.google.android.libraries.places.widget.AutocompleteSupportFragment"/>
     </androidx.cardview.widget.CardView>
 
+
+
     <Button
         android:id="@+id/btn_create_event"
         android:layout_width="316dp"
         android:layout_height="44dp"
-        android:layout_marginTop="192dp"
         android:layout_marginEnd="48dp"
+        android:layout_marginBottom="52dp"
         android:background="@drawable/border_black"
         android:text="@string/button_save_event"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="MissingConstraints" />
 

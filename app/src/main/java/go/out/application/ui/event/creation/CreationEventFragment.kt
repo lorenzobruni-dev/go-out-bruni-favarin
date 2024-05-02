@@ -1,7 +1,7 @@
 package go.out.application.ui.event.creation
 
-import PlaceInfo
 import FriendsAdapter
+import PlaceInfo
 import StateVO
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
@@ -38,7 +38,10 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
     private var selectedPlaceInfo: PlaceInfo? = null
 
     private var contactsMap: List<String> = mutableListOf()
-
+    private val contatti =
+        listOf(StateVO().apply { title = "Seleziona amici"},
+            StateVO().apply { title = "Contatto 2" },
+            StateVO().apply { title = "Contatto 3" })
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -138,13 +141,16 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
 
             if (isPossibleToSendInvite)
 
+                selectedPlaceInfo?.let { it1 ->
                     viewModel.saveEvent(
                         requireContext(),
                         editTextNameEvent?.text.toString(),
                         ediTextData?.text.toString(),
                         editTextOra?.text.toString(),
-                        selectedPlaceInfo
+                        contactsMap,
+                        it1
                     )
+                }
 
             else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
                 .show()

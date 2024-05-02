@@ -8,7 +8,6 @@ import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewmodel.CreationExtras
 import com.google.firebase.auth.FirebaseAuth
 import go.out.application.FirebaseDBHelper
 import go.out.application.User
@@ -28,8 +27,8 @@ class CreationEventViewModel : ViewModel() {
         nome: String,
         data: String,
         ora: String,
-        friends: List<String>,
-        placeInfo: PlaceInfo
+        friends: List<String>?,
+        placeInfo: PlaceInfo,
     ) {
         newEvent = Event()
         newEvent.set_event(
@@ -41,7 +40,6 @@ class CreationEventViewModel : ViewModel() {
                 ora,
                 friends,
                 placeInfo,
-                null
             )
         )
 

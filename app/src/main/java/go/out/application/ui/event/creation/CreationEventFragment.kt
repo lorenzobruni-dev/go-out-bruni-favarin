@@ -6,10 +6,8 @@ import StateVO
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -126,16 +124,16 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                     place.latLng?.latitude ?: 0.0,
                     place.latLng?.longitude ?: 0.0
                 )
-                Log.d(TAG , selectedPlaceInfo?.address.toString())
-                autocompleteFragment.setText(selectedPlaceInfo?.address)
+                autocompleteFragment.setHint(selectedPlaceInfo?.address.toString())
             }
 
             override fun onError(p0: Status) {
-                Toast.makeText(requireContext() , "Some error" , Toast.LENGTH_SHORT).show()
-
+                //Non gestito
             }
 
+
         })
+
 
 
         btn_saveChanges.setOnClickListener {

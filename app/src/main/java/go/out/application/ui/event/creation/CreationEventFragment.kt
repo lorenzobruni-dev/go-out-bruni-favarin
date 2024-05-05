@@ -1,17 +1,19 @@
 package go.out.application.ui.event.creation
 
+import FriendsAdapter
 import PlaceInfo
+import StateVO
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -27,12 +29,16 @@ import go.out.application.R
 import java.util.Calendar
 import java.util.Locale
 
-class CreationEventFragment : Fragment(), OnMapReadyCallback {
+class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , OnMapReadyCallback {
 
     private val viewModel: CreationEventViewModel by viewModels()
     private val minDateInMillis = System.currentTimeMillis()
     private var selectedPlaceInfo: PlaceInfo? = null
 
+    private var contactsMap: List<String> = mutableListOf()
+    private val contatti = mutableListOf<StateVO>()
+
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,6 +46,7 @@ class CreationEventFragment : Fragment(), OnMapReadyCallback {
         savedInstanceState: Bundle?
     ): View? {
 
+        val basePromptRecyclerView = "Seleziona amici"
         val view = inflater.inflate(R.layout.creation_event, container, false)
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -48,11 +55,21 @@ class CreationEventFragment : Fragment(), OnMapReadyCallback {
         val ediTextData = view?.findViewById<EditText>(R.id.editTextData)
         val editTextOra = view?.findViewById<EditText>(R.id.editTextOra)
         val editTextNameEvent = view?.findViewById<EditText>(R.id.editTextNome)
-
+        val spinnerContatti = view?.findViewById<Spinner>(R.id.spinnerContatti)
         val hours = calendar.get(Calendar.HOUR_OF_DAY)
         val minutes = calendar.get(Calendar.MINUTE)
 
         val btn_saveChanges = view.findViewById<Button>(R.id.btn_create_event)
+
+        contatti.add(StateVO().apply { title = basePromptRecyclerView })
+
+        viewModel.getFriends { friendNames ->
+            contatti.removeAll { it.title != basePromptRecyclerView }
+
+            friendNames.forEach { name ->
+                contatti.add(StateVO().apply { title = name })
+            }
+        }
 
         ediTextData?.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
@@ -107,23 +124,24 @@ class CreationEventFragment : Fragment(), OnMapReadyCallback {
                     place.latLng?.latitude ?: 0.0,
                     place.latLng?.longitude ?: 0.0
                 )
-                Log.d(TAG , selectedPlaceInfo?.address.toString())
-                autocompleteFragment.setText(selectedPlaceInfo?.address)
+                autocompleteFragment.setHint(selectedPlaceInfo?.address.toString())
             }
 
             override fun onError(p0: Status) {
-                Toast.makeText(requireContext() , "Some error" , Toast.LENGTH_SHORT).show()
-
+                //Non gestito
             }
+
 
         })
 
 
+
         btn_saveChanges.setOnClickListener {
-            var isPossibleToSendInvite =
+            val isPossibleToSendInvite =
                 editTextNameEvent?.text.toString().isNotEmpty() &&
                         ediTextData?.text.toString().isNotEmpty() &&
                         editTextOra?.text.toString().isNotEmpty() &&
+                        contactsMap.isNotEmpty() &&
                         selectedPlaceInfo?.id.toString().isNotEmpty()
 
             if (isPossibleToSendInvite)
@@ -133,18 +151,34 @@ class CreationEventFragment : Fragment(), OnMapReadyCallback {
                         editTextNameEvent?.text.toString(),
                         ediTextData?.text.toString(),
                         editTextOra?.text.toString(),
+                        contactsMap,
                         place
                     )
                 }
+
             else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
                 .show()
         }
+        val adapter = FriendsAdapter(requireContext(), R.layout.spinner_item_checkbox, contatti)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        adapter.setStateChangeListener(this)
 
+        if (spinnerContatti != null) {
+            spinnerContatti.adapter = adapter
+        }
         return view
     }
 
+
+
     override fun onDestroy() {
         super.onDestroy()
+    }
+
+    override fun onStateChanged() {
+        contactsMap = contatti
+            .filter { it.selected }
+            .map { it.title }
     }
 
     override fun onMapReady(p0: GoogleMap?) {

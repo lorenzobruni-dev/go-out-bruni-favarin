@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
 
         auth = FirebaseAuth.getInstance()
         var currentUser = auth.currentUser!!
-        val userID = currentUser?.uid
+        val userID = currentUser.uid
         val emailUser = currentUser.email
 
         binding = ActivityMainBinding.inflate(layoutInflater)

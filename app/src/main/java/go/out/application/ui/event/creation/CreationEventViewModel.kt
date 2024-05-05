@@ -1,10 +1,8 @@
 package go.out.application.ui.event.creation
 
 import PlaceInfo
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.os.Build
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
@@ -71,11 +69,10 @@ class CreationEventViewModel : ViewModel() {
 
     }
 
-    fun getFriends(): List<String> {
-        FirebaseDBHelper.getNomiContattiForCreationEvent(currentUserId.uid){
-            friendsList -> Log.d(TAG , "${friendsList.map { it }}")
+    fun getFriends(callback: (List<String>) -> Unit) {
+        FirebaseDBHelper.getNomiContattiForCreationEvent(currentUserId.uid) { friendNames ->
+            callback(friendNames)
         }
-        return mutableListOf()
     }
 
 }

@@ -38,10 +38,8 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
     private var selectedPlaceInfo: PlaceInfo? = null
 
     private var contactsMap: List<String> = mutableListOf()
-    private val contatti =
-        listOf(StateVO().apply { title = "Seleziona amici"},
-            StateVO().apply { title = "Contatto 2" },
-            StateVO().apply { title = "Contatto 3" })
+    private val contatti = mutableListOf<StateVO>()
+
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
@@ -50,7 +48,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
         savedInstanceState: Bundle?
     ): View? {
 
-
+        val basePromptRecyclerView = "Seleziona amici"
         val view = inflater.inflate(R.layout.creation_event, container, false)
         val calendar = Calendar.getInstance()
         val year = calendar.get(Calendar.YEAR)
@@ -64,6 +62,16 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
         val minutes = calendar.get(Calendar.MINUTE)
 
         val btn_saveChanges = view.findViewById<Button>(R.id.btn_create_event)
+
+        contatti.add(StateVO().apply { title = basePromptRecyclerView })
+
+        viewModel.getFriends { friendNames ->
+            contatti.removeAll { it.title != basePromptRecyclerView }
+
+            friendNames.forEach { name ->
+                contatti.add(StateVO().apply { title = name })
+            }
+        }
 
         ediTextData?.setOnClickListener {
             val datePickerDialog = DatePickerDialog(
@@ -131,8 +139,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
 
 
         btn_saveChanges.setOnClickListener {
-            viewModel.getFriends()
-            var isPossibleToSendInvite =
+            val isPossibleToSendInvite =
                 editTextNameEvent?.text.toString().isNotEmpty() &&
                         ediTextData?.text.toString().isNotEmpty() &&
                         editTextOra?.text.toString().isNotEmpty() &&
@@ -140,15 +147,14 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                         selectedPlaceInfo?.id.toString().isNotEmpty()
 
             if (isPossibleToSendInvite)
-
-                selectedPlaceInfo?.let { it1 ->
+                selectedPlaceInfo?.let { place ->
                     viewModel.saveEvent(
                         requireContext(),
                         editTextNameEvent?.text.toString(),
                         ediTextData?.text.toString(),
                         editTextOra?.text.toString(),
                         contactsMap,
-                        it1
+                        place
                     )
                 }
 

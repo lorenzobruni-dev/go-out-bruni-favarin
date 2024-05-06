@@ -1,6 +1,6 @@
 package go.out.application
 
-data class User (
+data class User(
     var id: String?,
     var nome: String?,
     var password: String?,
@@ -8,6 +8,12 @@ data class User (
     var contatti: MutableList<String>?,
     var eventi: MutableList<String>?
 ) {
-    private val dbReference = FirebaseDBHelper.dbUsers.child("user")
-    constructor(): this("", "", "", "", null, null)
+    private val dbReference = FirebaseDBHelper.dbUsers.child("User")
+
+    constructor() : this("", "", "", "", null, null)
+
+    fun getUser(): User {
+        return User(id, nome, password, email, contatti, eventi)
+    }
+
 }

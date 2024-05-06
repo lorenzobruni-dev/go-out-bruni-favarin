@@ -49,7 +49,7 @@ class FullEventListActivity : AppCompatActivity() {
             )
             val listView = findViewById<ListView>(R.id.listViewFullEventList)
             listView?.adapter = adapter
-                adapter.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
             }
         }
     }

@@ -97,33 +97,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
-//    fun showAddFriendDialog() {
-//        val builder = AlertDialog.Builder(this)
-//        builder.setTitle("Aggiungi amico")
-//
-//        val inputEmail = EditText(this)
-//        inputEmail.inputType = InputType.TYPE_CLASS_TEXT
-//        builder.setView(inputEmail)
-//
-//        builder.setPositiveButton("Ricerca") { dialog, _ ->
-//            val email = inputEmail.text.toString()
-//            FirebaseDBHelper.searchUserByEmail(email) { friendID, message ->
-//                if (friendID != null) {
-//                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//                } else {
-//                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-//                }
-//                dialog.dismiss()
-//            }
-//        }
-//        builder.setNegativeButton("Annulla") { dialog, _ ->
-//            dialog.dismiss()
-//        }
-//        builder.show()
-//    }
-
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)

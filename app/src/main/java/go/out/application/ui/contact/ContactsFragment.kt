@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -59,21 +60,38 @@ class ContactsFragment : Fragment() {
             // Aggiungi qui la logica per gestire l'azione quando viene cliccato un elemento
         }
 
+        var btnNewContact = view.findViewById<Button>(R.id.btnNewContact)
+        btnNewContact.setOnClickListener {
+            FirebaseDBHelper.showAddFriendDialog(requireContext()) { trovato ->
+                if (trovato) {
+                    // Aggiorna la lista dei contatti
+                    data.clear()
+                    FirebaseDBHelper.getNomiContatti(currentUser.uid) { utentiList ->
+                        data.addAll(utentiList)
+                        adapter.notifyDataSetChanged()
+                    }
+                }
+            }
 
+        }
 
         return view
     }
 
+
     override fun onDestroy() {
         super.onDestroy()
     }
-
-
-
+    private fun refreshFragment() {
+        // Ricarica il Fragment
+        val transaction = requireFragmentManager().beginTransaction()
+        transaction.detach(this).attach(this).commit()
+    }
 
     class ViewHolder {
         var textNome: android.widget.TextView? = null
         var textEmail: android.widget.TextView? = null
     }
 }
+
 

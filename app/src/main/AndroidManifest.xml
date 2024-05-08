@@ -17,18 +17,14 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="GOOGLE_PLACES_API_KEY"/>
         <activity
-            android:name=".Registration"
-            android:exported="false" />
-        <activity
-            android:name=".MainActivity2"
-            android:exported="false" />
-        <activity
+            android:parentActivityName=".MainActivity"
             android:name=".FullEventListActivity"
             android:exported="false" />
         <activity
+            android:parentActivityName=".ui.login.LoginActivity"
             android:name=".ui.registration.RegistrationActivity"
             android:exported="false"
-            android:parentActivityName=".ui.login.LoginActivity"/>
+        />
         <activity
             android:name=".ui.login.LoginActivity"
             android:exported="true">

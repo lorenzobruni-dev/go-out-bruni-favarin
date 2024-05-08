@@ -1,5 +1,6 @@
 package go.out.application
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.text.InputType
@@ -62,7 +63,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.nav_addContact -> {
-                    showAddFriendDialog()
+                    FirebaseDBHelper.showAddFriendDialog(this){}
                     true
                 }
                 else -> {
@@ -96,33 +97,6 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-
-
-    private fun showAddFriendDialog() {
-        val builder = AlertDialog.Builder(this)
-        builder.setTitle("Aggiungi amico")
-
-        val inputEmail = EditText(this)
-        inputEmail.inputType = InputType.TYPE_CLASS_TEXT
-        builder.setView(inputEmail)
-
-        builder.setPositiveButton("Ricerca") { dialog, _ ->
-            val email = inputEmail.text.toString()
-            FirebaseDBHelper.searchUserByEmail(email) { friendID, message ->
-                if (friendID != null) {
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                } else {
-                    Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
-                }
-                dialog.dismiss()
-            }
-        }
-        builder.setNegativeButton("Annulla") { dialog, _ ->
-            dialog.dismiss()
-        }
-        builder.show()
-    }
-
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)
         startActivity(intent)
@@ -133,5 +107,6 @@ class MainActivity : AppCompatActivity() {
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         return navController.navigateUp(appBarConfiguration) || super.onSupportNavigateUp()
     }
+
 
 }

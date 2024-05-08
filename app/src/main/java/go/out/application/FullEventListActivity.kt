@@ -16,6 +16,7 @@ class FullEventListActivity : AppCompatActivity() {
         var isAnInvitationOrConfirmEvent = intent.getBooleanExtra("bool_key", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_event_list)
+        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
         if (isAnInvitationOrConfirmEvent) getInvitationsData()

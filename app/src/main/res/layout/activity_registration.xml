@@ -21,12 +21,6 @@
             android:layout_gravity="center_horizontal"
             app:srcCompat="@mipmap/logo_foreground" />
 
-        <ImageView
-            android:id="@+id/btn_back"
-            android:layout_width="45dp"
-            android:layout_height="51dp"
-            android:layout_gravity="left|center_vertical"
-            android:src="@mipmap/ic_back_arrow" />
     </TableRow>
 
     <TableRow

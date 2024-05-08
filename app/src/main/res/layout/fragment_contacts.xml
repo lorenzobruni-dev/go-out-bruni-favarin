@@ -20,10 +20,10 @@
             android:padding="16dp" />
 
         <Button
-            android:id="@+id/btnTorna"
+            android:id="@+id/btnNewContact"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Torna"
+            android:text="Aggiungi nuovo contatto"
             android:layout_margin="16dp" />
 
     </LinearLayout>

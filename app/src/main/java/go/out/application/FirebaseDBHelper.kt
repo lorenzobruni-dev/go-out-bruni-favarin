@@ -1,6 +1,11 @@
 package go.out.application
 
+import android.content.Context
+import android.text.InputType
 import android.util.Log
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
@@ -203,12 +208,22 @@ class FirebaseDBHelper {
             })
         }
 
-        fun removeParticipantFromEvent(
-            eventId: String,
-            userId: String,
-            onComplete: (Boolean) -> Unit
-        ) {
-            // Implementazione necessaria
+        fun removeParticipantFromEvent(eventId: String, userId: String, callback: (Boolean) -> Unit) {
+            var nomeUtente = ""
+            getUtenteDaID(userId) { user ->
+                if (user != null) {
+                    nomeUtente = user.nome!!
+                }
+            }
+            val eventRef = FirebaseDatabase.getInstance().getReference("events").child(eventId)
+            eventRef.child("partecipanti").child(nomeUtente).removeValue()
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        callback(true)
+                    } else {
+                        callback(false)
+                    }
+                }
         }
 
         fun addEvent(event: Event, onComplete: (Boolean) -> Unit) {
@@ -312,6 +327,37 @@ class FirebaseDBHelper {
             stringBuilder.append("\nConfermati:\n")
 
             return stringBuilder.toString()
+        }
+
+        fun showAddFriendDialog(context: Context, onFriendAdded: (Boolean) -> Unit) {
+            val builder = AlertDialog.Builder(context)
+            builder.setTitle("Aggiungi amico")
+
+            val inputEmail = EditText(context)
+            inputEmail.inputType = InputType.TYPE_CLASS_TEXT
+            builder.setView(inputEmail)
+
+            builder.setPositiveButton("Ricerca") { dialog, _ ->
+                val email = inputEmail.text.toString()
+                searchUserByEmail(email) { friendID, message ->
+                    if (friendID != null) {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        // Se l'amico viene aggiunto con successo, passiamo true alla lambda
+                        onFriendAdded(true)
+                    } else {
+                        Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
+                        // Se l'amico non viene aggiunto, passiamo false alla lambda
+                        onFriendAdded(false)
+                    }
+                    dialog.dismiss()
+                }
+            }
+            builder.setNegativeButton("Annulla") { dialog, _ ->
+                dialog.dismiss()
+                // Se l'utente annulla l'operazione, passiamo false alla lambda
+                onFriendAdded(false)
+            }
+            builder.show()
         }
 
 

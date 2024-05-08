@@ -16,6 +16,7 @@ class RegistrationActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_registration)
+        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
 
         registrationViewModel = RegistrationViewModel(this) // Istanzia il ViewModel
 
@@ -33,12 +34,6 @@ class RegistrationActivity : AppCompatActivity() {
             val confirmPass = confPass.text.toString()
 
             registrationViewModel.registerUser(nome, email, password, confirmPass)
-        }
-
-        val ret = findViewById<ImageView>(R.id.btn_back)
-        ret.setOnClickListener {
-            val intent = Intent(this, LoginActivity::class.java)
-            startActivity(intent)
         }
     }
 }

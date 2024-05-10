@@ -2,6 +2,7 @@ package go.out.application
 
 import android.app.AlertDialog
 import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -42,6 +43,12 @@ class EventAdapter(
         return view
     }
     private fun showEventDetailsDialog(eventId: String, boolean: Boolean) {
+        var nomeUtente = ""
+        FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
+            if (user != null) {
+                nomeUtente = user.nome!!
+            }
+        }
         val selectedEvent = eventsList.find { it.id == eventId }
         val alertDialogBuilder = AlertDialog.Builder(adapterContext)
         val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)
@@ -52,7 +59,7 @@ class EventAdapter(
         }
         if (boolean) {
             alertDialogBuilder.setNegativeButton("rifiuta") { dialog, _ ->
-                FirebaseDBHelper.removeParticipantFromEvent(eventId, currentUser.uid) { success ->
+                FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                     if (success) {
                         eventsList = eventsList.filterNot { it.id == eventId }
                         notifyDataSetChanged()
@@ -60,27 +67,9 @@ class EventAdapter(
                     dialog.dismiss()
                 }
             }
-            //  alertDialogBuilder.setNeutralButton("partecipa") { dialog, _ ->
-            //    FirebaseDBHelper.addEventToCurrentUser(selectedEvent) { success ->
-            //      if (success) {
-            //        FirebaseDBHelper.removeParticipantFromEvent(
-            //          eventId,
-            //        currentUser.uid
-            //  ) { removeSuccess ->
-            //    if (removeSuccess) {
-            //      eventsList = eventsList.filterNot { it.id == eventId }
-            //    notifyDataSetChanged()
-            // }
-            // }
-            // }
-
-            //dialog.dismiss()
-            // }
-            //}
         }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
-
 }}
 
 

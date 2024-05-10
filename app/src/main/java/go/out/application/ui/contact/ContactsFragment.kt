@@ -82,11 +82,6 @@ class ContactsFragment : Fragment() {
     override fun onDestroy() {
         super.onDestroy()
     }
-    private fun refreshFragment() {
-        // Ricarica il Fragment
-        val transaction = requireFragmentManager().beginTransaction()
-        transaction.detach(this).attach(this).commit()
-    }
 
     class ViewHolder {
         var textNome: android.widget.TextView? = null

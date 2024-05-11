@@ -10,7 +10,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.MutableData
+import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.values
 import go.out.application.ui.event.creation.Event
 
 class FirebaseDBHelper {
@@ -135,13 +138,19 @@ class FirebaseDBHelper {
         }
 
         fun getInvitedEvents(userId: String, callback: (List<Event>, List<String>) -> Unit) {
+            var nomeUtente = ""
+            getUtenteDaID(userId) { user ->
+                if (user != null) {
+                    nomeUtente = user.nome!!
+                }
+            }
             val eventsList = mutableListOf<Event>()
             val eventsIdsList = mutableListOf<String>()
             dbEvents.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     for (eventSnapshot in snapshot.children) {
                         val event = eventSnapshot.getValue(Event::class.java)
-                        if (event != null && event.partecipanti?.contains(userId) == true) {
+                        if (event != null && event.partecipanti?.contains(nomeUtente) == true) {
                             eventsList.add(event)
                             eventsIdsList.add(event.id!!)
                         }
@@ -201,23 +210,32 @@ class FirebaseDBHelper {
             })
         }
 
-        fun removeParticipantFromEvent(eventId: String, userId: String, callback: (Boolean) -> Unit) {
-            var nomeUtente = ""
-            getUtenteDaID(userId) { user ->
-                if (user != null) {
-                    nomeUtente = user.nome!!
+        fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
+            val eventReference = dbEvents.child(eventId) //recupera riferimento all'evento il questione dal DB
+            eventReference.runTransaction(object : Transaction.Handler {
+                override fun doTransaction(currentData: MutableData): Transaction.Result {
+                    val event = currentData.getValue(Event::class.java)
+                    if (event != null) {
+                        val participants = event.partecipanti?.toMutableList() //recupera la lista di invitati
+                        if (participants != null) {
+                            participants.remove(userId)  //rimiove l'utente dagli invitati
+                            event.partecipanti = participants //assegna la lista invitati modificata all'evento
+                            currentData.value = event  //sovrascrive l'evento modificato nel DB
+                        }
+                    }
+                    return Transaction.success(currentData)
                 }
-            }
-            val eventRef = FirebaseDatabase.getInstance().getReference("events").child(eventId)
-            eventRef.child("partecipanti").child(nomeUtente).removeValue()
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        callback(true)
+                override fun onComplete(databaseError: DatabaseError?, committed: Boolean, currentData: DataSnapshot?) {
+                    if (committed && databaseError == null) {
+                        onComplete(true)
                     } else {
-                        callback(false)
+                        onComplete(false)
                     }
                 }
+            })
         }
+
+
 
         fun addEvent(event: Event, onComplete: (Boolean) -> Unit) {
             val eventReference = dbEvents.push()
@@ -318,8 +336,10 @@ class FirebaseDBHelper {
             stringBuilder.append("Nome: ${event.nome}\n")
             stringBuilder.append("Data: ${event.data}\n")
             stringBuilder.append("Ora: ${event.ora}\n")
-            stringBuilder.append("\nPartecipanti: \n")
+
+            stringBuilder.append("\nConfermati:\n")
             event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index+1}) $item\n") }
+
 
             return stringBuilder.toString()
         }

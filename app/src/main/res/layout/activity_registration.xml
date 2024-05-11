@@ -35,7 +35,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_span="1"
-            android:text="Registrati"
+            android:text="@string/new_account"
             android:textSize="34sp"
             android:gravity="center_horizontal"
             android:textStyle="bold" />
@@ -55,7 +55,7 @@
             android:layout_height="54dp"
             android:layout_span="1"
             android:ems="10"
-            android:hint="nome utente"
+            android:hint="@string/username"
             android:inputType="text"
             android:textColorHint="#8B000000"
             android:visibility="visible" />
@@ -74,7 +74,7 @@
             android:layout_height="54dp"
             android:layout_span="1"
             android:ems="10"
-            android:hint="e-mail"
+            android:hint="@string/email"
             android:inputType="text"
             android:textColorHint="#8D020202" />
     </TableRow>
@@ -92,7 +92,7 @@
             android:layout_height="55dp"
             android:layout_span="1"
             android:ems="10"
-            android:hint="inserisci password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:textColorHint="#8C000000" />
     </TableRow>
@@ -110,7 +110,7 @@
             android:layout_height="56dp"
             android:layout_span="1"
             android:ems="10"
-            android:hint="conferma password"
+            android:hint="@string/confirm_password"
             android:inputType="textPassword"
             android:textColorHint="#8C000000" />
     </TableRow>
@@ -128,7 +128,7 @@
             android:layout_height="77dp"
             android:layout_span="1"
             android:background="#FFFFFF"
-            android:text="REGISTER"
+            android:text="@string/registration"
             android:textColor="@android:color/white"
             android:textSize="24sp"
             android:textStyle="bold" />

@@ -12,18 +12,30 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Benvenuto!"
+        android:text="@string/welcome"
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/tvInviti"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="@string/invitations"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/textViewBenvenuto"
+    />
+
     <FrameLayout
         android:id="@+id/frameLayoutBox1"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="45dp"
+        android:layout_marginBottom="28dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/border_black"
@@ -38,7 +50,7 @@
             android:id="@+id/messageTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Non hai ricevuto alcun invito"
+            android:text="@string/no_events"
             android:visibility="gone"
             android:padding="16dp"/>
 
@@ -55,7 +67,7 @@
             android:id="@+id/tv_mostra_altro1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mostra altro"
+            android:text="@string/show_more"
             android:textColor="@android:color/black"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"
@@ -65,11 +77,26 @@
 
     </FrameLayout>
 
+    <TextView
+        android:id="@+id/textViewInvitiCreati"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/created_events"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/frameLayoutBox1"
+        app:layout_constraintBottom_toTopOf="@id/frameLayoutBox2"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="18dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"/>
+
     <FrameLayout
         android:id="@+id/frameLayoutBox2"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginTop="28dp"
+        android:layout_marginBottom="18dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:background="@drawable/border_black"
@@ -85,7 +112,7 @@
             android:id="@+id/messageTextView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Non hai nessun evento in programma"
+            android:text="@string/no_events"
             android:visibility="gone"
             android:padding="16dp"/>
 
@@ -102,7 +129,7 @@
             android:id="@+id/tv_mostra_altro2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Mostra altro"
+            android:text="@string/show_more"
             android:textColor="@android:color/black"
             android:background="?attr/selectableItemBackground"
             android:padding="8dp"

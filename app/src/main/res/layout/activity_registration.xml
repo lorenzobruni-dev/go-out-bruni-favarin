@@ -3,7 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_gravity="center_vertical"
     tools:context=".ui.registration.RegistrationActivity"
     android:id="@+id/table_layout">
 
@@ -47,12 +48,16 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="18dp">
 
         <EditText
             android:id="@+id/et_user_name"
-            android:layout_width="300dp"
-            android:layout_height="54dp"
+            android:layout_width="316dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="18dp"
+            android:layout_marginEnd="18dp"
+            android:padding="8dp"
+            android:background="@drawable/style_border"
             android:layout_span="1"
             android:ems="10"
             android:hint="@string/username"
@@ -66,12 +71,16 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="5dp">
 
         <EditText
             android:id="@+id/et_email"
-            android:layout_width="300dp"
-            android:layout_height="54dp"
+            android:layout_width="316dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="18dp"
+            android:padding="8dp"
+            android:background="@drawable/style_border"
             android:layout_span="1"
             android:ems="10"
             android:hint="@string/email"
@@ -84,12 +93,16 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="5dp">
 
         <EditText
             android:id="@+id/et_password"
-            android:layout_width="300dp"
-            android:layout_height="55dp"
+            android:layout_width="316dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="18dp"
+            android:padding="8dp"
+            android:background="@drawable/style_border"
             android:layout_span="1"
             android:ems="10"
             android:hint="@string/password"
@@ -102,12 +115,16 @@
         android:layout_weight="1"
         android:layout_gravity="center_horizontal"
         android:gravity="center_horizontal"
-        android:layout_marginTop="30dp">
+        android:layout_marginTop="5dp">
 
         <EditText
             android:id="@+id/et_confirm_pwd"
-            android:layout_width="300dp"
-            android:layout_height="56dp"
+            android:layout_width="316dp"
+            android:layout_height="44dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginEnd="18dp"
+            android:padding="8dp"
+            android:background="@drawable/style_border"
             android:layout_span="1"
             android:ems="10"
             android:hint="@string/confirm_password"
@@ -124,20 +141,15 @@
 
         <Button
             android:id="@+id/btn_register"
-            android:layout_width="214dp"
-            android:layout_height="77dp"
-            android:layout_span="1"
-            android:background="#FFFFFF"
-            android:text="@string/registration"
+            android:layout_width="316dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="18dp"
+            android:layout_marginBottom="52dp"
+            android:background="@drawable/border_black"
+            android:text="@string/button_save_event"
+            android:textAllCaps="false"
             android:textColor="@android:color/white"
-            android:textSize="24sp"
             android:textStyle="bold" />
     </TableRow>
 
-    <TableRow
-        android:layout_height="0dp"
-        android:layout_weight="1"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="30dp">
-    </TableRow>
 </TableLayout>

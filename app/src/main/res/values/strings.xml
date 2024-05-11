@@ -22,6 +22,7 @@
     <string name="date_event">Data Evento</string>
     <string name="hour_event">Ora evento</string>
     <string name="button_save_event">Salva</string>
+    <string name="go_out_application">go-out-application</string>
 
 
     <!--registration string comment-->
@@ -30,7 +31,7 @@
     <string name="email">e-mail</string>
     <string name="password">password</string>
     <string name="confirm_password">conferma password</string>
-    <string name="new_account">Crea un nuovo account</string>
+    <string name="new_account">Registrati</string>
 
     <!--Home Fragment string comment-->
     <string name="welcome">Benvenuto</string>
@@ -38,4 +39,5 @@
     <string name="no_events">Non ci sono eventi</string>
     <string name="show_more">Mostra tutto</string>
     <string name="created_events">Eventi che hai creato</string>
+
 </resources>

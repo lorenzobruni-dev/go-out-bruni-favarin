@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.database.DatabaseReference
@@ -18,7 +17,6 @@ import go.out.application.User
 
 class ContactsFragment : Fragment() {
 
-    private val viewModel: ContactsViewModel by viewModels()
     private lateinit var auth: FirebaseAuth
     private lateinit var currentUser: FirebaseUser
     private lateinit var dbReference: DatabaseReference
@@ -57,10 +55,9 @@ class ContactsFragment : Fragment() {
         listView.setOnItemClickListener { _, _, position, _ ->
             val utenteSelezionato = data[position]
             Toast.makeText(requireContext(), "Hai cliccato su: ${utenteSelezionato.nome}", Toast.LENGTH_SHORT).show()
-            // Aggiungi qui la logica per gestire l'azione quando viene cliccato un elemento
         }
 
-        var btnNewContact = view.findViewById<Button>(R.id.btnNewContact)
+        val btnNewContact = view.findViewById<Button>(R.id.btnNewContact)
         btnNewContact.setOnClickListener {
             FirebaseDBHelper.showAddFriendDialog(requireContext()) { trovato ->
                 if (trovato) {

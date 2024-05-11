@@ -91,6 +91,8 @@ class HomeFragment : Fragment() {
                     R.layout.event_invitations,
                     primiElementi,
                     layoutInflater,
+                    currentUser,
+                    false
                 )
                 listView?.adapter = adapter
                 adapter.notifyDataSetChanged()
@@ -115,6 +117,8 @@ class HomeFragment : Fragment() {
                     R.layout.event_invitations,
                     primiElementi,
                     layoutInflater,
+                    currentUser,
+                    true
                 )
                 listView?.adapter = adapter
                 adapter.notifyDataSetChanged()

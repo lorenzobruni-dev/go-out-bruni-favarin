@@ -33,6 +33,8 @@ class FullEventListActivity : AppCompatActivity() {
                 R.layout.event_invitations,
                 eventsList,
                 layoutInflater,
+                currentUser,
+                true
             )
             val listView = findViewById<ListView>(R.id.listViewFullEventList)
             listView?.adapter = adapter
@@ -46,6 +48,8 @@ class FullEventListActivity : AppCompatActivity() {
                 R.layout.event_invitations,
                 confirmedEventsList,
                 layoutInflater,
+                currentUser,
+                false
             )
             val listView = findViewById<ListView>(R.id.listViewFullEventList)
             listView?.adapter = adapter

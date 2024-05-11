@@ -1,13 +1,8 @@
 package go.out.application
 
-import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.text.InputType
-import android.widget.EditText
 import android.widget.TextView
-import android.widget.Toast
-import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.findNavController
@@ -34,7 +29,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         auth = FirebaseAuth.getInstance()
-        var currentUser = auth.currentUser!!
+        val currentUser = auth.currentUser!!
         val userID = currentUser.uid
         val emailUser = currentUser.email
 
@@ -77,23 +72,21 @@ class MainActivity : AppCompatActivity() {
         val navUserEmailTextView: TextView = headerView.findViewById(R.id.textView)
         navUserEmailTextView.text = emailUser
 
-        if (userID != null) {
-            val db = FirebaseDBHelper.dbUsers.child(userID)
-            db.addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(dataSnapshot: DataSnapshot) {
-                    if (dataSnapshot.exists()) {
-                        val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
-                        if (nomeUtente != null) {
-                            val navUserName: TextView = headerView.findViewById(R.id.textViewNome)
-                            navUserName.text = nomeUtente
-                        }
+        val db = FirebaseDBHelper.dbUsers.child(userID)
+        db.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
+                    if (nomeUtente != null) {
+                        val navUserName: TextView = headerView.findViewById(R.id.textViewNome)
+                        navUserName.text = nomeUtente
                     }
                 }
-                override fun onCancelled(databaseError: DatabaseError) {
-                    // Handle possible errors
-                }
-            })
-        }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle possible errors
+            }
+        })
 
     }
 

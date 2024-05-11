@@ -7,7 +7,6 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,13 +29,7 @@ class FirebaseDBHelper {
             .getInstance("https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/")
             .getReference("Events")
 
-        fun readUser(userEventListener: ChildEventListener) {
-            dbUsers.addChildEventListener(userEventListener)
-        }
 
-        fun removeUser(id: String) {
-            dbUsers.child(id).removeValue()
-        }
 
         fun searchUserByEmail(emailAmico: String, callback: (String?, String?) -> Unit) {
             val utenteCorrente = FirebaseAuth.getInstance().currentUser
@@ -266,13 +259,15 @@ class FirebaseDBHelper {
                     val user = snapshot.getValue(User::class.java)
 
                     val friendsList: List<String> = user?.contatti ?: emptyList()
-                    val friendNames = mutableListOf<String>() // Lista temporanea per memorizzare i nomi dei contatti
+                    val friendNames =
+                        mutableListOf<String>() // Lista temporanea per memorizzare i nomi dei contatti
 
                     val friendCount = friendsList.size
                     var friendProcessed = 0 // Contatore per tenere traccia dei contatti elaborati
 
                     friendsList.forEach { friend ->
-                        val usersReference = FirebaseDatabase.getInstance().getReference("Users").child(friend)
+                        val usersReference =
+                            FirebaseDatabase.getInstance().getReference("Users").child(friend)
 
                         usersReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
@@ -343,11 +338,7 @@ class FirebaseDBHelper {
             stringBuilder.append("Ora: ${event.ora}\n")
 
             stringBuilder.append("\nConfermati:\n")
-            if (event.partecipanti != null){
-                for (utente in event.partecipanti!!){
-                    stringBuilder.append("\n${utente}\n")
-                }
-            }
+            event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index+1}) $item\n") }
 
 
             return stringBuilder.toString()

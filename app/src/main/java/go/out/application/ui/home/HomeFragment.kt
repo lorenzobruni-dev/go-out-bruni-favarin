@@ -1,5 +1,6 @@
 package go.out.application.ui.home
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +11,9 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import go.out.application.EventAdapter
 import go.out.application.FirebaseDBHelper
 import go.out.application.FullEventListActivity
@@ -35,6 +39,25 @@ class HomeFragment : Fragment() {
 
         getInvitationsData()
         getConfirmedEvents()
+
+        val welcomeText = view.findViewById<TextView>(R.id.textViewBenvenuto)
+
+        val db = FirebaseDBHelper.dbUsers.child(currentUser.uid)
+        db.addListenerForSingleValueEvent(object : ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
+                    if (nomeUtente != null) {
+                        welcomeText.text = "Benvenuto $nomeUtente! :)"
+                    }
+                }
+            }
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle possible errors
+            }
+        })
+
 
         val invitationEventView: TextView = view.findViewById(R.id.tv_mostra_altro1)
         invitationEventView.setOnClickListener {

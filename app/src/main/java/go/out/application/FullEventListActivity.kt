@@ -13,12 +13,15 @@ class FullEventListActivity : AppCompatActivity() {
     private lateinit var adapter: EventAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        var isAnInvitationOrConfirmEvent = intent.getBooleanExtra("bool_key", false)
+        val isAnInvitationOrConfirmEvent = intent.getBooleanExtra("bool_key", false)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_full_event_list)
-        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
+
+        title = "Lista eventi utente "
+
         if (isAnInvitationOrConfirmEvent) getInvitationsData()
          else getConfirmedEvents()
     }

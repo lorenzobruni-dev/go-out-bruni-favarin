@@ -2,12 +2,13 @@ package go.out.application
 
 import android.app.AlertDialog
 import android.content.Context
-import android.util.Log
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
+import android.widget.Toast
 import com.google.firebase.auth.FirebaseUser
 import go.out.application.ui.event.creation.Event
 
@@ -18,13 +19,15 @@ class EventAdapter(
     val layoutInflater: LayoutInflater,
     var currentUser: FirebaseUser,
     var boolean: Boolean
-) : ArrayAdapter<String>(adapterContext, resource, eventsList.map {it.id}) {
+) : ArrayAdapter<String>(adapterContext, resource, eventsList.map { it.id }) {
     private class ViewHolder {
         var eventName: TextView? = null
     }
+
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val view: View
         val holder: ViewHolder
+
         if (convertView == null) {
             view = layoutInflater.inflate(resource, parent, false)
             holder = ViewHolder()
@@ -38,18 +41,22 @@ class EventAdapter(
         val selectedEvent = eventsList.find { it.id == eventId }
         holder.eventName?.text = selectedEvent?.nome ?: "Nome non disponibile"
         view.setOnClickListener {
-            showEventDetailsDialog(eventId!!, boolean)
+            showEventDetailsDialog(eventId!!)
         }
         return view
     }
-    private fun showEventDetailsDialog(eventId: String, boolean: Boolean) {
+
+    private fun showEventDetailsDialog(eventId: String) {
         var nomeUtente = ""
         FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
             if (user != null) {
                 nomeUtente = user.nome!!
             }
         }
+
         val selectedEvent = eventsList.find { it.id == eventId }
+        val latitude = selectedEvent?.place?.latitude
+        val longitude = selectedEvent?.place?.longitude
         val alertDialogBuilder = AlertDialog.Builder(adapterContext)
         val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)
         alertDialogBuilder.setTitle("Dettagli dell'evento")
@@ -57,8 +64,23 @@ class EventAdapter(
         alertDialogBuilder.setPositiveButton("chiudi") { dialog, _ ->
             dialog.dismiss()
         }
+        if (latitude != null && longitude != null) {
+            alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
+                dialog.dismiss()
+                val nomeEvento = selectedEvent.nome
+                val intent = Intent(adapterContext, MapActivity::class.java).apply {
+                    putExtra("latitude", latitude)
+                    putExtra("longitude", longitude)
+                    putExtra("nomeEvento", nomeEvento)
+                }
+                adapterContext.startActivity(intent)
+            }
+        } else {
+            Toast.makeText(context, "Coordinate non disponibili", Toast.LENGTH_SHORT).show()
+        }
+
         if (boolean) {
-            alertDialogBuilder.setNegativeButton("rifiuta") { dialog, _ ->
+            alertDialogBuilder.setNeutralButton("rifiuta") { dialog, _ ->
                 FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                     if (success) {
                         eventsList = eventsList.filterNot { it.id == eventId }
@@ -70,7 +92,8 @@ class EventAdapter(
         }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
-}}
+    }
+}
 
 
 

@@ -19,7 +19,7 @@ class EventAdapter(
     val layoutInflater: LayoutInflater,
     var currentUser: FirebaseUser,
     var boolean: Boolean
-) : ArrayAdapter<String>(adapterContext, resource, eventsList.map {it.id}) {
+) : ArrayAdapter<String>(adapterContext, resource, eventsList.map { it.id }) {
     private class ViewHolder {
         var eventName: TextView? = null
     }
@@ -53,7 +53,10 @@ class EventAdapter(
                 nomeUtente = user.nome!!
             }
         }
+
         val selectedEvent = eventsList.find { it.id == eventId }
+        val latitude = selectedEvent?.place?.latitude
+        val longitude = selectedEvent?.place?.longitude
         val alertDialogBuilder = AlertDialog.Builder(adapterContext)
         val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)
         alertDialogBuilder.setTitle("Dettagli dell'evento")
@@ -61,25 +64,23 @@ class EventAdapter(
         alertDialogBuilder.setPositiveButton("chiudi") { dialog, _ ->
             dialog.dismiss()
         }
-        alertDialogBuilder.setPositiveButton("Apri mappa") { dialog, _ ->
-            dialog.dismiss()
-
-            val latitude = selectedEvent.place?.latitude
-            val longitude = selectedEvent.place?.longitude
-            val nomeEvento = selectedEvent.nome
-
-
-            if (latitude != null && longitude != null) {
+        if (latitude != null && longitude != null) {
+            alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
+                dialog.dismiss()
+                val nomeEvento = selectedEvent.nome
                 val intent = Intent(adapterContext, MapActivity::class.java).apply {
                     putExtra("latitude", latitude)
                     putExtra("longitude", longitude)
-                    putExtra("nomeEvento" , nomeEvento)
+                    putExtra("nomeEvento", nomeEvento)
                 }
                 adapterContext.startActivity(intent)
-            } else Toast.makeText(context, "Coordinate non disponibili", Toast.LENGTH_SHORT).show()
+            }
+        } else {
+            Toast.makeText(context, "Coordinate non disponibili", Toast.LENGTH_SHORT).show()
         }
+
         if (boolean) {
-            alertDialogBuilder.setNegativeButton("rifiuta") { dialog, _ ->
+            alertDialogBuilder.setNeutralButton("rifiuta") { dialog, _ ->
                 FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                     if (success) {
                         eventsList = eventsList.filterNot { it.id == eventId }
@@ -91,8 +92,8 @@ class EventAdapter(
         }
         val alertDialog = alertDialogBuilder.create()
         alertDialog.show()
-
-}}
+    }
+}
 
 
 

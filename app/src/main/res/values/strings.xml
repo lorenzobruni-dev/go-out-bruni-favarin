@@ -1,7 +1,6 @@
 <resources>
 
     <!--generics string comment-->
-
     <string name="app_name">GoOutApplication</string>
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
@@ -14,6 +13,8 @@
     <string name="menu_add_contatto">Aggiungi contatto</string>
     <string name="menu_new_event">Nuovo evento</string>
     <string name="menu_exit">Esci</string>
+    <string name="login">Accedi</string>
+    <string name="create_account">Crea un nuovo account</string>
     <string name="id_api_key">AIzaSyAOttNFQASJTO7XM1Xg0oZT2akP6KckfEg</string>
 
     <!--Creation Event string comment-->
@@ -21,4 +22,20 @@
     <string name="date_event">Data Evento</string>
     <string name="hour_event">Ora evento</string>
     <string name="button_save_event">Salva</string>
+
+
+    <!--registration string comment-->
+    <string name="registration">Registrati</string>
+    <string name="username">nome utente</string>
+    <string name="email">e-mail</string>
+    <string name="password">password</string>
+    <string name="confirm_password">conferma password</string>
+    <string name="new_account">Crea un nuovo account</string>
+
+    <!--Home Fragment string comment-->
+    <string name="welcome">Benvenuto</string>
+    <string name="invitations">Inviti</string>
+    <string name="no_events">Non ci sono eventi</string>
+    <string name="show_more">Mostra tutto</string>
+    <string name="created_events">Eventi che hai creato</string>
 </resources>

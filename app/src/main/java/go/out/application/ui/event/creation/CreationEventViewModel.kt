@@ -8,7 +8,6 @@ import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import go.out.application.FirebaseDBHelper
-import go.out.application.User
 
 class CreationEventViewModel : ViewModel() {
     var auth = FirebaseDBHelper.auth
@@ -16,7 +15,6 @@ class CreationEventViewModel : ViewModel() {
     val creatoreId = currentUserId.uid
     val eventsId = auth.currentUser?.uid
     lateinit var newEvent: Event
-    private val data: MutableList<User> = ArrayList()
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -29,7 +27,7 @@ class CreationEventViewModel : ViewModel() {
         placeInfo: PlaceInfo,
     ) {
         newEvent = Event()
-        newEvent.set_event(
+        newEvent.setEvent(
             Event(
                 eventsId,
                 creatoreId,

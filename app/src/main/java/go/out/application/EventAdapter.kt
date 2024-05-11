@@ -87,6 +87,7 @@ class EventAdapter(
                         notifyDataSetChanged()
                     }
                     dialog.dismiss()
+                    Toast.makeText(context,"Evento con id: $eventId cancellato" , Toast.LENGTH_SHORT).show()
                 }
             }
         }

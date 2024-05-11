@@ -8,8 +8,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.TextView
-import com.google.firebase.auth.FirebaseUser
 import android.widget.Toast
+import com.google.firebase.auth.FirebaseUser
 import go.out.application.ui.event.creation.Event
 
 class EventAdapter(
@@ -47,6 +47,12 @@ class EventAdapter(
     }
 
     private fun showEventDetailsDialog(eventId: String) {
+        var nomeUtente = ""
+        FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
+            if (user != null) {
+                nomeUtente = user.nome!!
+            }
+        }
         val selectedEvent = eventsList.find { it.id == eventId }
         val alertDialogBuilder = AlertDialog.Builder(adapterContext)
         val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)

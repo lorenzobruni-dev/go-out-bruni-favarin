@@ -6,8 +6,10 @@ import StateVO
 import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
+import android.content.ContentValues.TAG
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -29,7 +31,7 @@ import go.out.application.R
 import java.util.Calendar
 import java.util.Locale
 
-class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , OnMapReadyCallback {
+class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener, OnMapReadyCallback {
 
     private val viewModel: CreationEventViewModel by viewModels()
     private val minDateInMillis = System.currentTimeMillis()
@@ -116,7 +118,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                 Place.Field.LAT_LNG
             )
         )
-        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener{
+        autocompleteFragment.setOnPlaceSelectedListener(object : PlaceSelectionListener {
             override fun onPlaceSelected(place: Place) {
                 selectedPlaceInfo = PlaceInfo(
                     place.id ?: "",
@@ -127,8 +129,8 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                 autocompleteFragment.setHint(selectedPlaceInfo?.address.toString())
             }
 
-            override fun onError(p0: Status) {
-                //Non gestito
+            override fun onError(error: Status) {
+                Log.e(TAG, error.toString())
             }
 
 
@@ -144,7 +146,7 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                         contactsMap.isNotEmpty() &&
                         selectedPlaceInfo?.id.toString().isNotEmpty()
 
-            if (isPossibleToSendInvite)
+            if (isPossibleToSendInvite) {
                 selectedPlaceInfo?.let { place ->
                     viewModel.saveEvent(
                         requireContext(),
@@ -155,9 +157,16 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
                         place
                     )
                 }
+                editTextNameEvent?.setText("")
+                ediTextData?.setText("")
+                editTextOra?.setText("")
+                contactsMap = emptyList()
+                autocompleteFragment.setHint("")
 
-            else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
+            } else Toast.makeText(requireContext(), "Errore nell'inserimento", Toast.LENGTH_SHORT)
                 .show()
+
+
         }
         val adapter = FriendsAdapter(requireContext(), R.layout.spinner_item_checkbox, contatti)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -168,7 +177,6 @@ class CreationEventFragment : Fragment(), FriendsAdapter.StateChangeListener , O
         }
         return view
     }
-
 
 
     override fun onDestroy() {

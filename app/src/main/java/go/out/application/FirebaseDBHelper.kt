@@ -216,8 +216,7 @@ class FirebaseDBHelper {
 
                     if (user != null && user.eventi?.isNotEmpty() == true) {
                         user.eventi!!.forEach { eventId ->
-                            val eventRef =
-                                FirebaseDatabase.getInstance().getReference("Events").child(eventId)
+                            val eventRef = dbEvents.child(eventId)
                             eventRef.addListenerForSingleValueEvent(object : ValueEventListener {
                                 override fun onDataChange(eventSnapshot: DataSnapshot) {
                                     val event = eventSnapshot.getValue(Event::class.java)

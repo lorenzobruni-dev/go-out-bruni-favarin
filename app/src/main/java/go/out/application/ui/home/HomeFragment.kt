@@ -37,19 +37,20 @@ class HomeFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
 
+        deletionsOfEmptyPartecipantOnASingleEvent()
         getInvitationsData()
         getConfirmedEvents()
 
         val welcomeText = view.findViewById<TextView>(R.id.textViewBenvenuto)
 
-        val db = FirebaseDBHelper.dbUsers.child(currentUser.uid)
-        db.addListenerForSingleValueEvent(object : ValueEventListener {
+        val userReference = FirebaseDBHelper.dbUsers.child(currentUser.uid)
+        userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
                     if (nomeUtente != null) {
-                        welcomeText.text = "Benvenuto $nomeUtente! :)"
+                        welcomeText.text = "Welcome $nomeUtente! :) "
                     }
                 }
             }
@@ -72,6 +73,10 @@ class HomeFragment : Fragment() {
             intent.putExtra("bool_key", false)
             startActivity(intent)
         }
+    }
+
+    private fun deletionsOfEmptyPartecipantOnASingleEvent(){
+        FirebaseDBHelper.removeEventsFromUserWhenPartecipantFieldIsEmpty(currentUser.uid)
     }
     private fun getConfirmedEvents() {
         FirebaseDBHelper.getUserEvents(currentUser.uid) { confirmedEventsList, eventNamesList ->

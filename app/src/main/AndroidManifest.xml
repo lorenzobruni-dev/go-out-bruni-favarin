@@ -20,21 +20,24 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyAOttNFQASJTO7XM1Xg0oZT2akP6KckfEg" />
         <uses-library android:name="com.google.android.maps" />
-
         <activity
             android:name=".FullEventListActivity"
             android:exported="false"
+            android:screenOrientation="locked"
             android:parentActivityName=".MainActivity" />
         <activity
             android:name=".ui.registration.RegistrationActivity"
             android:exported="false"
+            android:screenOrientation="locked"
             android:parentActivityName=".ui.login.LoginActivity" />
         <activity
             android:name="go.out.application.MapActivity"
             android:exported="false"
+            android:screenOrientation="locked"
             android:parentActivityName=".FullEventListActivity" />
         <activity
             android:name=".ui.login.LoginActivity"
+            android:screenOrientation="locked"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -45,6 +48,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="false"
+            android:screenOrientation="locked"
             android:theme="@style/Theme.GoOutApplication.NoActionBar" />
     </application>
 

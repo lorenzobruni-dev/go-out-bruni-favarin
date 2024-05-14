@@ -164,7 +164,10 @@ class FirebaseDBHelper {
             })
         }
 
-        fun removeEventsFromUserWhenPartecipantFieldIsEmpty(userId: String) {
+        fun removeEventsFromUserWhenPartecipantFieldIsEmpty(
+            userId: String,
+            onComplete: (Boolean) -> Unit
+        ) {
             val userReference = dbUsers.child(userId)
 
             userReference.addListenerForSingleValueEvent(object : ValueEventListener {
@@ -181,6 +184,7 @@ class FirebaseDBHelper {
                                         .child(event.key!!).ref.removeValue()
                                     eventReference.ref.removeValue()
                                 }
+                                onComplete(true)
                             }
 
                             override fun onCancelled(error: DatabaseError) {
@@ -189,11 +193,12 @@ class FirebaseDBHelper {
 
                         })
                     }
-
-
+                    onComplete(true)
                 }
 
                 override fun onCancelled(error: DatabaseError) {
+                    onComplete(false)
+
                     Log.e(TAG, error.toString())
                 }
 
@@ -382,7 +387,6 @@ class FirebaseDBHelper {
 
             stringBuilder.append("\nConfermati:\n")
             event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index + 1}) $item\n") }
-
 
             return stringBuilder.toString()
         }

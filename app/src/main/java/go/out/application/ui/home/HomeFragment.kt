@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -32,14 +33,14 @@ class HomeFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
 
-        deletionsOfEmptyPartecipantOnASingleEvent()
         getInvitationsData()
-        getConfirmedEvents()
+        deletionEventsWhenPartecipantFieldsIsEmpty()
 
         val welcomeText = view.findViewById<TextView>(R.id.textViewBenvenuto)
 
@@ -54,6 +55,7 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
+
             override fun onCancelled(databaseError: DatabaseError) {
                 // Handle possible errors
             }
@@ -75,9 +77,15 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun deletionsOfEmptyPartecipantOnASingleEvent(){
-        FirebaseDBHelper.removeEventsFromUserWhenPartecipantFieldIsEmpty(currentUser.uid)
+    private fun deletionEventsWhenPartecipantFieldsIsEmpty() {
+        FirebaseDBHelper.removeEventsFromUserWhenPartecipantFieldIsEmpty(currentUser.uid) { onComplete ->
+            if (onComplete) {
+                getConfirmedEvents()
+            } else Toast.makeText(context, "Generic error", Toast.LENGTH_SHORT).show()
+        }
     }
+
+
     private fun getConfirmedEvents() {
         FirebaseDBHelper.getUserEvents(currentUser.uid) { confirmedEventsList, eventNamesList ->
             val messageTextView = view?.findViewById<TextView>(R.id.messageTextView2)
@@ -104,6 +112,7 @@ class HomeFragment : Fragment() {
             }
         }
     }
+
     private fun getInvitationsData() {
         FirebaseDBHelper.getInvitedEvents(currentUser.uid) { eventsList, eventsIdsList ->
             val messageTextView = view?.findViewById<TextView>(R.id.messageTextView)
@@ -129,7 +138,10 @@ class HomeFragment : Fragment() {
                 adapter.notifyDataSetChanged()
             }
         }
+
     }
+
+
 }
 
 

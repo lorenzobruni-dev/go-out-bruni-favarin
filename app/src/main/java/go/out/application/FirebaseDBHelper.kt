@@ -14,7 +14,6 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.MutableData
 import com.google.firebase.database.Transaction
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.database.values
 import go.out.application.ui.event.creation.Event
 
 class FirebaseDBHelper {
@@ -170,8 +169,22 @@ class FirebaseDBHelper {
 
             userReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val events = snapshot.child("eventi").children
+                    val eventsFieldsFromUser = snapshot.child("eventi").children
 
+                    eventsFieldsFromUser.forEach { event ->
+                        val eventReference = dbEvents.child(event.value.toString())
+                        eventReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val singleEvent = snapshot.getValue(Event::class.java)
+                                Log.d(TAG , singleEvent.toString())
+                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e(TAG , error.toString())
+                            }
+
+                        })
+                    }
                     /*events.forEach { eventSnapshot ->
 
                         val eventsReference = dbEvents.child(eventSnapshot.toString())

@@ -173,35 +173,22 @@ class FirebaseDBHelper {
 
                     eventsFieldsFromUser.forEach { event ->
                         val eventReference = dbEvents.child(event.value.toString())
-                        eventReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                        eventReference.addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val singleEvent = snapshot.getValue(Event::class.java)
-                                Log.d(TAG , singleEvent.toString())
+                                if (singleEvent != null && singleEvent.partecipanti == null) {
+                                    userReference.child("eventi")
+                                        .child(event.key!!).ref.removeValue()
+                                    eventReference.ref.removeValue()
+                                }
                             }
-
-                            override fun onCancelled(error: DatabaseError) {
-                                Log.e(TAG , error.toString())
-                            }
-
-                        })
-                    }
-                    /*events.forEach { eventSnapshot ->
-
-                        val eventsReference = dbEvents.child(eventSnapshot.toString())
-                        eventsReference.addListenerForSingleValueEvent(object : ValueEventListener{
-                            override fun onDataChange(snapshot: DataSnapshot) {
-                                val event = eventSnapshot.getValue(Event::class.java)
-                                if (event != null && event.partecipanti?.isEmpty() == true) {
-                                    Log.d(TAG , event.toString())
-                                }                            }
 
                             override fun onCancelled(error: DatabaseError) {
                                 Log.e(TAG, error.toString())
                             }
 
                         })
-
-                    }*/
+                    }
 
 
                 }

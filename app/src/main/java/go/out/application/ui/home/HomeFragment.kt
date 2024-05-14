@@ -37,6 +37,7 @@ class HomeFragment : Fragment() {
         auth = FirebaseAuth.getInstance()
         currentUser = auth.currentUser!!
 
+        deletionsOfEmptyPartecipantOnASingleEvent()
         getInvitationsData()
         getConfirmedEvents()
 
@@ -72,6 +73,10 @@ class HomeFragment : Fragment() {
             intent.putExtra("bool_key", false)
             startActivity(intent)
         }
+    }
+
+    private fun deletionsOfEmptyPartecipantOnASingleEvent(){
+        FirebaseDBHelper.removeEventsFromUserWhenPartecipantFieldIsEmpty(currentUser.uid)
     }
     private fun getConfirmedEvents() {
         FirebaseDBHelper.getUserEvents(currentUser.uid) { confirmedEventsList, eventNamesList ->

@@ -21,7 +21,8 @@ class FirebaseDBHelper {
 
     companion object {
 
-        private const val FIREBASE_INSTANCE = "https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/"
+        private const val FIREBASE_INSTANCE =
+            "https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/"
 
         var auth = FirebaseAuth.getInstance()
         val dbUsers = FirebaseDatabase
@@ -31,7 +32,6 @@ class FirebaseDBHelper {
         val dbEvents = FirebaseDatabase
             .getInstance(FIREBASE_INSTANCE)
             .getReference("Events")
-
 
 
         fun searchUserByEmail(emailAmico: String, callback: (String?, String?) -> Unit) {
@@ -165,6 +165,41 @@ class FirebaseDBHelper {
             })
         }
 
+        fun removeEventsFromUserWhenPartecipantFieldIsEmpty(userId: String) {
+            val userReference = dbUsers.child(userId)
+
+            userReference.addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    val events = snapshot.child("eventi").children
+
+                    /*events.forEach { eventSnapshot ->
+
+                        val eventsReference = dbEvents.child(eventSnapshot.toString())
+                        eventsReference.addListenerForSingleValueEvent(object : ValueEventListener{
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val event = eventSnapshot.getValue(Event::class.java)
+                                if (event != null && event.partecipanti?.isEmpty() == true) {
+                                    Log.d(TAG , event.toString())
+                                }                            }
+
+                            override fun onCancelled(error: DatabaseError) {
+                                Log.e(TAG, error.toString())
+                            }
+
+                        })
+
+                    }*/
+
+
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Log.e(TAG, error.toString())
+                }
+
+            })
+        }
+
         fun getUserEvents(userId: String, callback: (List<Event>, List<String>) -> Unit) {
             val confirmedList = mutableListOf<Event>()
             val eventNamesList = mutableListOf<String>()
@@ -212,7 +247,11 @@ class FirebaseDBHelper {
             })
         }
 
-        fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
+        fun removeParticipantFromEvent(
+            eventId: String,
+            userId: String,
+            onComplete: (Boolean) -> Unit
+        ) {
             val eventReference = dbEvents.child(eventId)
             eventReference.runTransaction(object : Transaction.Handler {
                 override fun doTransaction(currentData: MutableData): Transaction.Result {
@@ -227,7 +266,12 @@ class FirebaseDBHelper {
                     }
                     return Transaction.success(currentData)
                 }
-                override fun onComplete(databaseError: DatabaseError?, committed: Boolean, currentData: DataSnapshot?) {
+
+                override fun onComplete(
+                    databaseError: DatabaseError?,
+                    committed: Boolean,
+                    currentData: DataSnapshot?
+                ) {
                     if (committed && databaseError == null) {
                         onComplete(true)
                     } else {
@@ -236,7 +280,6 @@ class FirebaseDBHelper {
                 }
             })
         }
-
 
 
         fun addEvent(event: Event, onComplete: (Boolean) -> Unit) {
@@ -288,14 +331,14 @@ class FirebaseDBHelper {
                             }
 
                             override fun onCancelled(error: DatabaseError) {
-                                Log.e(TAG ,error.toString() )
+                                Log.e(TAG, error.toString())
                             }
                         })
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    Log.e(TAG ,databaseError.toString() )
+                    Log.e(TAG, databaseError.toString())
                 }
             })
         }
@@ -338,7 +381,7 @@ class FirebaseDBHelper {
             stringBuilder.append("Ora: ${event.ora}\n")
 
             stringBuilder.append("\nConfermati:\n")
-            event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index+1}) $item\n") }
+            event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index + 1}) $item\n") }
 
 
             return stringBuilder.toString()

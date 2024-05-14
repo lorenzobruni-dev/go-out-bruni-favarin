@@ -42,14 +42,14 @@ class HomeFragment : Fragment() {
 
         val welcomeText = view.findViewById<TextView>(R.id.textViewBenvenuto)
 
-        val db = FirebaseDBHelper.dbUsers.child(currentUser.uid)
-        db.addListenerForSingleValueEvent(object : ValueEventListener {
+        val userReference = FirebaseDBHelper.dbUsers.child(currentUser.uid)
+        userReference.addListenerForSingleValueEvent(object : ValueEventListener {
             @SuppressLint("SetTextI18n")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.exists()) {
                     val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
                     if (nomeUtente != null) {
-                        welcomeText.text = "Benvenuto $nomeUtente! :)"
+                        welcomeText.text = "Welcome $nomeUtente! :) "
                     }
                 }
             }

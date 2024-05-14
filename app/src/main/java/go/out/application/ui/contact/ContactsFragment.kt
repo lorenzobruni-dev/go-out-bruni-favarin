@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ListView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -49,27 +48,6 @@ class ContactsFragment : Fragment() {
             data.clear()
             data.addAll(utentiList)
             adapter.notifyDataSetChanged()
-        }
-
-
-        listView.setOnItemClickListener { _, _, position, _ ->
-            val utenteSelezionato = data[position]
-            Toast.makeText(requireContext(), "Hai cliccato su: ${utenteSelezionato.nome}", Toast.LENGTH_SHORT).show()
-        }
-
-        val btnNewContact = view.findViewById<Button>(R.id.btnNewContact)
-        btnNewContact.setOnClickListener {
-            FirebaseDBHelper.showAddFriendDialog(requireContext()) { trovato ->
-                if (trovato) {
-                    // Aggiorna la lista dei contatti
-                    data.clear()
-                    FirebaseDBHelper.getNomiContatti(currentUser.uid) { utentiList ->
-                        data.addAll(utentiList)
-                        adapter.notifyDataSetChanged()
-                    }
-                }
-            }
-
         }
 
         return view

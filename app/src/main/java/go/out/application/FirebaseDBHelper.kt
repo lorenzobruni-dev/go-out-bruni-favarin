@@ -1,5 +1,6 @@
 package go.out.application
 
+import android.content.ContentValues.TAG
 import android.content.Context
 import android.text.InputType
 import android.util.Log
@@ -20,13 +21,15 @@ class FirebaseDBHelper {
 
     companion object {
 
+        private const val FIREBASE_INSTANCE = "https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/"
+
         var auth = FirebaseAuth.getInstance()
         val dbUsers = FirebaseDatabase
-            .getInstance("https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getInstance(FIREBASE_INSTANCE)
             .getReference("Users")
 
         val dbEvents = FirebaseDatabase
-            .getInstance("https://progetto-pdm-goout-default-rtdb.europe-west1.firebasedatabase.app/")
+            .getInstance(FIREBASE_INSTANCE)
             .getReference("Events")
 
 
@@ -41,7 +44,6 @@ class FirebaseDBHelper {
                                 snapshot.children.firstOrNull()?.getValue(User::class.java)
                             if (amicoTrovato != null && amicoTrovato.id != user.uid) {
                                 val idAmico = amicoTrovato.id
-                                // Aggiungi amico ai contatti dell'utente corrente
                                 aggiornaContattiUtente(user.uid, idAmico!!) { error ->
                                     if (error == null) {
                                         callback(idAmico, "Amico aggiunto con successo!")
@@ -211,16 +213,16 @@ class FirebaseDBHelper {
         }
 
         fun removeParticipantFromEvent(eventId: String, userId: String, onComplete: (Boolean) -> Unit) {
-            val eventReference = dbEvents.child(eventId) //recupera riferimento all'evento il questione dal DB
+            val eventReference = dbEvents.child(eventId)
             eventReference.runTransaction(object : Transaction.Handler {
                 override fun doTransaction(currentData: MutableData): Transaction.Result {
                     val event = currentData.getValue(Event::class.java)
                     if (event != null) {
-                        val participants = event.partecipanti?.toMutableList() //recupera la lista di invitati
+                        val participants = event.partecipanti?.toMutableList()
                         if (participants != null) {
-                            participants.remove(userId)  //rimiove l'utente dagli invitati
-                            event.partecipanti = participants //assegna la lista invitati modificata all'evento
-                            currentData.value = event  //sovrascrive l'evento modificato nel DB
+                            participants.remove(userId)
+                            event.partecipanti = participants
+                            currentData.value = event
                         }
                     }
                     return Transaction.success(currentData)
@@ -260,10 +262,10 @@ class FirebaseDBHelper {
 
                     val friendsList: List<String> = user?.contatti ?: emptyList()
                     val friendNames =
-                        mutableListOf<String>() // Lista temporanea per memorizzare i nomi dei contatti
+                        mutableListOf<String>()
 
                     val friendCount = friendsList.size
-                    var friendProcessed = 0 // Contatore per tenere traccia dei contatti elaborati
+                    var friendProcessed = 0
 
                     friendsList.forEach { friend ->
                         val usersReference =
@@ -274,28 +276,26 @@ class FirebaseDBHelper {
                                 val user = snapshot.getValue(User::class.java)
                                 val friendListName: String? = user?.nome
 
-                                // Aggiungi il nome del contatto alla lista temporanea
                                 friendListName?.let { name ->
                                     friendNames.add(name)
                                 }
 
-                                // Controlla se tutti i contatti sono stati processati
                                 friendProcessed++
                                 if (friendProcessed == friendCount) {
-                                    // Tutti i contatti sono stati processati, passa indietro la lista dei nomi dei contatti
+
                                     callback(friendNames)
                                 }
                             }
 
                             override fun onCancelled(error: DatabaseError) {
-                                // Gestisci l'errore se necessario
+                                Log.e(TAG ,error.toString() )
                             }
                         })
                     }
                 }
 
                 override fun onCancelled(databaseError: DatabaseError) {
-                    // Gestisci l'errore se necessario
+                    Log.e(TAG ,databaseError.toString() )
                 }
             })
         }
@@ -357,11 +357,9 @@ class FirebaseDBHelper {
                 searchUserByEmail(email) { friendID, message ->
                     if (friendID != null) {
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        // Se l'amico viene aggiunto con successo, passiamo true alla lambda
                         onFriendAdded(true)
                     } else {
                         Toast.makeText(context, message, Toast.LENGTH_SHORT).show()
-                        // Se l'amico non viene aggiunto, passiamo false alla lambda
                         onFriendAdded(false)
                     }
                     dialog.dismiss()
@@ -369,7 +367,6 @@ class FirebaseDBHelper {
             }
             builder.setNegativeButton("Annulla") { dialog, _ ->
                 dialog.dismiss()
-                // Se l'utente annulla l'operazione, passiamo false alla lambda
                 onFriendAdded(false)
             }
             builder.show()

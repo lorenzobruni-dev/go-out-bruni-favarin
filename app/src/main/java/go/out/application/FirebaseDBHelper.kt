@@ -128,8 +128,12 @@ class FirebaseDBHelper {
 
             userReference.addListenerForSingleValueEvent(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    val utente = snapshot.getValue(User::class.java)
-                    onComplete(utente)
+                    if (snapshot.exists()) {
+                        val utente = snapshot.getValue(User::class.java)
+                        onComplete(utente)
+                    } else {
+                        onComplete(null)
+                    }
                 }
 
                 override fun onCancelled(error: DatabaseError) {
@@ -378,17 +382,29 @@ class FirebaseDBHelper {
             }
         }
 
-        fun buildEventDetailsMessage(event: Event): String {
-            val stringBuilder = StringBuilder()
-            stringBuilder.append("Nome: ${event.nome}\n")
-            stringBuilder.append("Data: ${event.data}\n")
-            stringBuilder.append("Ora: ${event.ora}\n")
+        fun buildEventDetailsMessage(event: Event, onComplete: (String) -> Unit) {
+            getUtenteDaID(event.creatore!!) { user ->
+                val stringBuilder = StringBuilder()
 
-            stringBuilder.append("\nConfermati:\n")
-            event.partecipanti?.forEachIndexed { index, item -> stringBuilder.append("${index + 1}) $item\n") }
+                stringBuilder.append("Nome Evento: ${event.nome}\n")
+                stringBuilder.append("Data: ${event.data}\n")
+                stringBuilder.append("Ora: ${event.ora}\n")
 
-            return stringBuilder.toString()
+                if (user != null) {
+                    stringBuilder.append("Creatore: ${user.nome}\n")
+                } else {
+                    stringBuilder.append("Creatore: Non trovato\n")
+                }
+
+                stringBuilder.append("\nConfermati:\n")
+                event.partecipanti?.forEachIndexed { index, item ->
+                    stringBuilder.append("${index + 1}) $item\n")
+                }
+
+                onComplete(stringBuilder.toString())
+            }
         }
+
 
         fun showAddFriendDialog(context: Context, onFriendAdded: (Boolean) -> Unit) {
             val builder = AlertDialog.Builder(context)

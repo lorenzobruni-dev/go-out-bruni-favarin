@@ -11,7 +11,7 @@ import go.out.application.ui.login.LoginActivity
 
 class RegistrationViewModel(private val context: RegistrationActivity) {
 
-    private val auth: FirebaseAuth = Firebase.auth
+    val auth = Firebase.auth
 
     fun registerUser(nome: String, email: String, password: String, confirmPassword: String) {
         if (nome.isEmpty() || email.isEmpty() || password.isEmpty() || confirmPassword.isEmpty()) {

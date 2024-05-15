@@ -47,53 +47,67 @@ class EventAdapter(
     }
 
     private fun showEventDetailsDialog(eventId: String) {
-        var nomeUtente = ""
-        FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
-            if (user != null) {
-                nomeUtente = user.nome!!
-            }
-        }
-
         val selectedEvent = eventsList.find { it.id == eventId }
-        val latitude = selectedEvent?.place?.latitude
-        val longitude = selectedEvent?.place?.longitude
-        val alertDialogBuilder = AlertDialog.Builder(adapterContext)
-        val message = FirebaseDBHelper.buildEventDetailsMessage(selectedEvent!!)
-        alertDialogBuilder.setTitle("Dettagli dell'evento")
-        alertDialogBuilder.setMessage(message)
-        alertDialogBuilder.setPositiveButton("chiudi") { dialog, _ ->
-            dialog.dismiss()
-        }
-        if (latitude != null && longitude != null) {
-            alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
-                dialog.dismiss()
-                val nomeEvento = selectedEvent.nome
-                val intent = Intent(adapterContext, MapActivity::class.java).apply {
-                    putExtra("latitude", latitude)
-                    putExtra("longitude", longitude)
-                    putExtra("nomeEvento", nomeEvento)
-                }
-                adapterContext.startActivity(intent)
-            }
-        } else {
-            Toast.makeText(context, "Coordinate non disponibili", Toast.LENGTH_SHORT).show()
+        if (selectedEvent == null) {
+            Toast.makeText(context, "Evento non trovato", Toast.LENGTH_SHORT).show()
+            return
         }
 
-        if (boolean) {
-            alertDialogBuilder.setNeutralButton("rifiuta") { dialog, _ ->
-                FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
-                    if (success) {
-                        eventsList = eventsList.filterNot { it.id == eventId }
-                        notifyDataSetChanged()
-                    }
+        FirebaseDBHelper.getUtenteDaID(selectedEvent.creatore!!) { user ->
+            val alertDialogBuilder = AlertDialog.Builder(adapterContext)
+
+            FirebaseDBHelper.buildEventDetailsMessage(selectedEvent) { message ->
+                alertDialogBuilder.setTitle("Dettagli dell'evento")
+                alertDialogBuilder.setMessage(message)
+                alertDialogBuilder.setPositiveButton("Chiudi") { dialog, _ ->
                     dialog.dismiss()
-                    Toast.makeText(context,"Evento con id: $eventId cancellato" , Toast.LENGTH_SHORT).show()
                 }
+
+                val latitude = selectedEvent.place?.latitude
+                val longitude = selectedEvent.place?.longitude
+
+                if (latitude != null && longitude != null) {
+                    alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
+                        dialog.dismiss()
+                        val nomeEvento = selectedEvent.nome
+                        val intent = Intent(adapterContext, MapActivity::class.java).apply {
+                            putExtra("latitude", latitude)
+                            putExtra("longitude", longitude)
+                            putExtra("nomeEvento", nomeEvento)
+                        }
+                        adapterContext.startActivity(intent)
+                    }
+                } else {
+                    Toast.makeText(context, "Coordinate non disponibili", Toast.LENGTH_SHORT).show()
+                }
+
+                if (boolean) {
+                    var nomeUtente = ""
+                    FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
+                        if (user != null) {
+                            nomeUtente = user.nome!!
+                            alertDialogBuilder.setNeutralButton("Rifiuta") { dialog, _ ->
+                                FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
+                                    if (success) {
+                                        eventsList = eventsList.filterNot { it.id == eventId }
+                                        notifyDataSetChanged()
+                                    }
+                                    dialog.dismiss()
+                                    Toast.makeText(context, "Evento con id: $eventId cancellato", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        } else {
+                            Toast.makeText(context, "Errore nel recupero del nome utente", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+                }
+
+                val alertDialog = alertDialogBuilder.create()
+                alertDialog.show()
             }
         }
-        val alertDialog = alertDialogBuilder.create()
-        alertDialog.show()
     }
+
 }
 
 

@@ -392,6 +392,7 @@ class FirebaseDBHelper {
 
                 if (user != null) {
                     stringBuilder.append("Creatore: ${user.nome}\n")
+                    stringBuilder.append("email: ${user.email}\n")
                 } else {
                     stringBuilder.append("Creatore: Non trovato\n")
                 }

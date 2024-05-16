@@ -89,31 +89,36 @@ class EventAdapter(
                 }
 
                 if (boolean) {
-                    var nomeUtente: String = ""
-                    FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
-                        if (user != null) {
-                            nomeUtente = user.nome!!
-                            alertDialogBuilder.setNegativeButton("Rifiuta") { dialog, _ ->
+                    FirebaseDBHelper.getUtenteDaID(currentUser.uid) { currentUser ->
+                        if (currentUser != null) {
+                            val nomeUtente = currentUser.nome!!
+                            alertDialogBuilder.setNeutralButton("Rifiuta") { dialog, _ ->
                                 FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                                     if (success) {
                                         eventsList = eventsList.filterNot { it.id == eventId }
                                         notifyDataSetChanged()
                                     }
                                     dialog.dismiss()
-                                    Toast.makeText(context, "Evento con id: $eventId cancellato", Toast.LENGTH_SHORT).show()
+                                    Toast.makeText(context, "Evento cancellato", Toast.LENGTH_SHORT).show()
                                 }
                             }
                         } else {
                             Toast.makeText(context, "Errore nel recupero del nome utente", Toast.LENGTH_SHORT).show()
                         }
-                    }
-                }
 
-                val alertDialog = alertDialogBuilder.create()
-                alertDialog.show()
+                        // Solo ora mostriamo l'alert dialog dopo aver configurato tutti i bottoni.
+                        val alertDialog = alertDialogBuilder.create()
+                        alertDialog.show()
+                    }
+                } else {
+                    // Se il boolean è falso, mostriamo subito l'alert dialog.
+                    val alertDialog = alertDialogBuilder.create()
+                    alertDialog.show()
+                }
             }
         }
     }
+
 
 }
 

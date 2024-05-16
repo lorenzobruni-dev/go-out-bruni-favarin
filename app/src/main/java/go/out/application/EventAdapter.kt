@@ -59,7 +59,7 @@ class EventAdapter(
             FirebaseDBHelper.buildEventDetailsMessage(selectedEvent) { message ->
                 alertDialogBuilder.setTitle("Dettagli dell'evento")
                 alertDialogBuilder.setMessage(message)
-                alertDialogBuilder.setPositiveButton("Chiudi") { dialog, _ ->
+                alertDialogBuilder.setNeutralButton("Chiudi") { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -67,7 +67,7 @@ class EventAdapter(
                 val longitude = selectedEvent.place?.longitude
 
                 if (latitude != null && longitude != null) {
-                    alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
+                    alertDialogBuilder.setPositiveButton("Apri mappa") { dialog, _ ->
                         dialog.dismiss()
                         val nomeEvento = selectedEvent.nome
                         val intent = Intent(adapterContext, MapActivity::class.java).apply {
@@ -85,7 +85,7 @@ class EventAdapter(
                     FirebaseDBHelper.getUtenteDaID(currentUser.uid) { currentUser ->
                         if (currentUser != null) {
                             val nomeUtente = currentUser.nome!!
-                            alertDialogBuilder.setNeutralButton("Rifiuta") { dialog, _ ->
+                            alertDialogBuilder.setNegativeButton("Rifiuta") { dialog, _ ->
                                 FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                                     if (success) {
                                         eventsList = eventsList.filterNot { it.id == eventId }
@@ -99,12 +99,10 @@ class EventAdapter(
                             Toast.makeText(context, "Errore nel recupero del nome utente", Toast.LENGTH_SHORT).show()
                         }
 
-                        // Solo ora mostriamo l'alert dialog dopo aver configurato tutti i bottoni.
                         val alertDialog = alertDialogBuilder.create()
                         alertDialog.show()
                     }
                 } else {
-                    // Se il boolean è falso, mostriamo subito l'alert dialog.
                     val alertDialog = alertDialogBuilder.create()
                     alertDialog.show()
                 }
@@ -114,7 +112,3 @@ class EventAdapter(
 
 
 }
-
-
-
-

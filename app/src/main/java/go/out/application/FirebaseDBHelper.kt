@@ -47,7 +47,7 @@ class FirebaseDBHelper {
                                     if (error == null) {
                                         callback(idAmico, "Amico aggiunto con successo!")
                                     } else {
-                                        callback(null, "Errore durante l'aggiunta dell'amico")
+                                        callback(null, error.toString())
                                     }
                                 }
                             } else {

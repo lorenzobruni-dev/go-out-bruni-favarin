@@ -8,10 +8,10 @@ import android.widget.ArrayAdapter
 import go.out.application.R
 import go.out.application.User
 
-class Adapter(
-    val adapterContext: Context,
-    val resource: Int,
-    val objects: List<User>,
+class ContactAdapter(
+    adapterContext: Context,
+    resource: Int,
+    objects: List<User>,
     val layoutInflater: LayoutInflater,
 ) : ArrayAdapter<User>(adapterContext, resource, objects) {
 
@@ -20,7 +20,7 @@ class Adapter(
         val holder: ContactsFragment.ViewHolder
 
         if (convertView == null) {
-            view = layoutInflater.inflate(R.layout.list_item_layout, parent, false)
+            view = layoutInflater.inflate(R.layout.contact_item, parent, false)
             holder = ContactsFragment.ViewHolder()
             holder.textNome = view.findViewById(R.id.textNome)
             holder.textEmail = view.findViewById(R.id.textEmail)
@@ -31,11 +31,15 @@ class Adapter(
         }
 
         val utente = getItem(position)
-        holder.textNome?.text = utente?.nome
+        holder.textNome?.text = capitalizeFirstLetter(utente?.nome ?: "")
         holder.textEmail?.text = utente?.email
 
 
         return view
+    }
+
+    private fun capitalizeFirstLetter(name: String): String {
+        return name.replaceFirstChar { it.uppercase() }
     }
 
 }

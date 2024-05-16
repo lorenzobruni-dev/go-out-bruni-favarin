@@ -39,11 +39,15 @@ class EventAdapter(
         }
         val eventId = getItem(position)
         val selectedEvent = eventsList.find { it.id == eventId }
-        holder.eventName?.text = selectedEvent?.nome ?: "Nome non disponibile"
+        holder.eventName?.text = capitalizeFirstLetter(selectedEvent?.nome ?: "Nome non disponibile")
         view.setOnClickListener {
             showEventDetailsDialog(eventId!!)
         }
         return view
+    }
+
+    private fun capitalizeFirstLetter(name: String): String {
+        return name.replaceFirstChar { it.uppercase() }
     }
 
     private fun showEventDetailsDialog(eventId: String) {
@@ -82,7 +86,7 @@ class EventAdapter(
                 }
 
                 if (boolean) {
-                    var nomeUtente = ""
+                    var nomeUtente: String = ""
                     FirebaseDBHelper.getUtenteDaID(currentUser.uid) { user ->
                         if (user != null) {
                             nomeUtente = user.nome!!

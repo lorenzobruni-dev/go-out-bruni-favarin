@@ -5,7 +5,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -19,7 +18,7 @@ class ContactsFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
     private lateinit var currentUser: FirebaseUser
     private lateinit var dbReference: DatabaseReference
-    private lateinit var adapter: Adapter
+    private lateinit var contactAdapter: ContactAdapter
     private val data: MutableList<User> = ArrayList()
 
     override fun onCreateView(
@@ -33,21 +32,21 @@ class ContactsFragment : Fragment() {
         currentUser = auth.currentUser!!
         dbReference = FirebaseDBHelper.dbUsers.child(currentUser.uid)
 
-        adapter = Adapter(
+        contactAdapter = ContactAdapter(
             requireContext(),
-            R.layout.list_item_layout,
+            R.layout.contact_item,
             data,
             LayoutInflater.from(requireContext())
         )
 
         val listView: ListView = view.findViewById(R.id.listViewUsers)
-        listView.adapter = adapter
+        listView.adapter = contactAdapter
 
 
         FirebaseDBHelper.getNomiContatti(currentUser.uid) { utentiList ->
             data.clear()
             data.addAll(utentiList)
-            adapter.notifyDataSetChanged()
+            contactAdapter.notifyDataSetChanged()
         }
 
         return view

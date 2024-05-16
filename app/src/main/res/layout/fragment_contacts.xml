@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/quantum_yellow600"
     tools:context=".ui.contact.ContactsFragment">
 
     <LinearLayout
@@ -15,9 +16,11 @@
             android:layout_width="match_parent"
             android:layout_height="600dp"
             android:layout_weight="1"
-            android:divider="@android:color/darker_gray"
-            android:dividerHeight="0.5dp"
-            android:padding="16dp" />
+            android:divider="@null"
+            android:dividerHeight="10dp"
+            android:padding="10dp"/>
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
+
+

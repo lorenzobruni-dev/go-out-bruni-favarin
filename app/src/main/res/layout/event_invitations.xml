@@ -1,9 +1,39 @@
-<?xml version="1.0" encoding="utf-8"?>
-
-<TextView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/textEventId"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:textSize="16sp"
-    android:padding="10dp"/>
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/card_background"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
+
+        <TextView
+            android:id="@+id/textEventId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:text="Il tuo testo in grassetto"
+            android:textStyle="bold" /> <!-- Testo in grassetto -->
+
+        <TextView
+            android:id="@+id/textEventInfo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textEventId"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="10dp"
+            android:text="Clicca per info evento"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textStyle="italic" /> <!-- Testo in corsivo -->
+
+    </RelativeLayout>
+
+</androidx.cardview.widget.CardView>

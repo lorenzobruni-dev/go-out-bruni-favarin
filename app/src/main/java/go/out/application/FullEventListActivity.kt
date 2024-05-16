@@ -23,7 +23,7 @@ class FullEventListActivity : AppCompatActivity() {
         title = "Lista eventi utente "
 
         if (isAnInvitationOrConfirmEvent) getInvitationsData()
-         else getConfirmedEvents()
+        else getConfirmedEvents()
     }
 
     private fun getInvitationsData() {

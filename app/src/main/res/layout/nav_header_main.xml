@@ -25,5 +25,7 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:textStyle="italic"
+        android:textAppearance="@android:style/TextAppearance.Small"
         android:text="@string/nav_header_subtitle" />
 </LinearLayout>

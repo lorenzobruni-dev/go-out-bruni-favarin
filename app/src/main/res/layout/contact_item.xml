@@ -1,43 +1,51 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-xmlns:app="http://schemas.android.com/apk/res-auto"
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-app:cardCornerRadius="8dp"
-app:cardElevation="4dp">
-
-<RelativeLayout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@drawable/card_background"
-    android:paddingStart="10dp"
-    android:paddingTop="10dp"
-    android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    app:cardCornerRadius="8dp"
+    app:cardElevation="4dp">
 
-    <TextView
-        android:id="@+id/textNome"
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
-        android:padding="10dp"
-        android:text="Il tuo testo in grassetto"
-        android:textStyle="bold" />
+        android:background="@drawable/card_background"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="10dp"
+        android:paddingBottom="10dp">
 
-    <TextView
-        android:id="@+id/textEmail"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/textNome"
-        android:layout_marginTop="4dp"
-        android:layout_marginLeft="10dp"
-        android:text="Clicca per info evento"
-        android:textAppearance="@android:style/TextAppearance.Small"
-        android:textStyle="italic" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="61dp"
+            android:layout_height="66dp"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:scaleType="fitXY"
+            android:src="@mipmap/icon_user" />
 
-</RelativeLayout>
+        <TextView
+            android:id="@+id/textNome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/imageView"
+            android:textSize="16sp"
+            android:padding="10dp"
+            android:text="Il tuo testo in grassetto"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/textEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/textNome"
+            android:layout_toEndOf="@id/imageView"
+            android:layout_marginTop="4dp"
+            android:layout_marginLeft="10dp"
+            android:text="Clicca per info evento"
+            android:textAppearance="@android:style/TextAppearance.Small"
+            android:textStyle="italic" />
+
+    </RelativeLayout>
 
 </androidx.cardview.widget.CardView>
-
-
-

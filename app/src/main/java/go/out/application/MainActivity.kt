@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() {
                     val nomeUtente = dataSnapshot.child("nome").getValue(String::class.java)
                     if (nomeUtente != null) {
                         val navUserName: TextView = headerView.findViewById(R.id.textViewNome)
-                        navUserName.text = nomeUtente
+                        navUserName.text = capitalizeFirstLetter(nomeUtente)
                     }
                 }
             }
@@ -89,6 +89,10 @@ class MainActivity : AppCompatActivity() {
         })
 
     }
+    private fun capitalizeFirstLetter(name: String): String {
+        return name.replaceFirstChar { it.uppercase() }
+    }
+
 
     private fun startLoginActivity() {
         val intent = Intent(this, LoginActivity::class.java)

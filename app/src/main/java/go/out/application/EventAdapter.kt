@@ -59,8 +59,6 @@ class EventAdapter(
             return
         }
 
-        Log.d(TAG , boolean.toString())
-
 
         FirebaseDBHelper.getUtenteDaID(selectedEvent.creatore!!) { user ->
             val alertDialogBuilder = AlertDialog.Builder(adapterContext)

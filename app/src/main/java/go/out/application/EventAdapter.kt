@@ -1,10 +1,8 @@
 package go.out.application
 
 import android.app.AlertDialog
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -41,15 +39,11 @@ class EventAdapter(
         }
         val eventId = getItem(position)
         val selectedEvent = eventsList.find { it.id == eventId }
-        holder.eventName?.text = capitalizeFirstLetter(selectedEvent?.nome ?: "Nome non disponibile")
+        holder.eventName?.text = selectedEvent?.nome ?: "Nome non disponibile"
         view.setOnClickListener {
             showEventDetailsDialog(eventId!!)
         }
         return view
-    }
-
-    private fun capitalizeFirstLetter(name: String): String {
-        return name.replaceFirstChar { it.uppercase() }
     }
 
     private fun showEventDetailsDialog(eventId: String) {
@@ -59,14 +53,13 @@ class EventAdapter(
             return
         }
 
-
         FirebaseDBHelper.getUtenteDaID(selectedEvent.creatore!!) { user ->
             val alertDialogBuilder = AlertDialog.Builder(adapterContext)
 
             FirebaseDBHelper.buildEventDetailsMessage(selectedEvent) { message ->
                 alertDialogBuilder.setTitle("Dettagli dell'evento")
                 alertDialogBuilder.setMessage(message)
-                alertDialogBuilder.setPositiveButton("Chiudi") { dialog, _ ->
+                alertDialogBuilder.setNeutralButton("Chiudi") { dialog, _ ->
                     dialog.dismiss()
                 }
 
@@ -74,7 +67,7 @@ class EventAdapter(
                 val longitude = selectedEvent.place?.longitude
 
                 if (latitude != null && longitude != null) {
-                    alertDialogBuilder.setNegativeButton("Apri mappa") { dialog, _ ->
+                    alertDialogBuilder.setPositiveButton("Apri mappa") { dialog, _ ->
                         dialog.dismiss()
                         val nomeEvento = selectedEvent.nome
                         val intent = Intent(adapterContext, MapActivity::class.java).apply {
@@ -92,7 +85,7 @@ class EventAdapter(
                     FirebaseDBHelper.getUtenteDaID(currentUser.uid) { currentUser ->
                         if (currentUser != null) {
                             val nomeUtente = currentUser.nome!!
-                            alertDialogBuilder.setNeutralButton("Rifiuta") { dialog, _ ->
+                            alertDialogBuilder.setNegativeButton("Rifiuta") { dialog, _ ->
                                 FirebaseDBHelper.removeParticipantFromEvent(eventId, nomeUtente) { success ->
                                     if (success) {
                                         eventsList = eventsList.filterNot { it.id == eventId }
@@ -106,12 +99,10 @@ class EventAdapter(
                             Toast.makeText(context, "Errore nel recupero del nome utente", Toast.LENGTH_SHORT).show()
                         }
 
-                        // Solo ora mostriamo l'alert dialog dopo aver configurato tutti i bottoni.
                         val alertDialog = alertDialogBuilder.create()
                         alertDialog.show()
                     }
                 } else {
-                    // Se il boolean è falso, mostriamo subito l'alert dialog.
                     val alertDialog = alertDialogBuilder.create()
                     alertDialog.show()
                 }
@@ -121,7 +112,3 @@ class EventAdapter(
 
 
 }
-
-
-
-
